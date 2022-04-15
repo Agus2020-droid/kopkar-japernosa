@@ -1,0 +1,382 @@
+@extends ('layout.v_template')
+@section('title','Edit Pinjaman')
+
+@section('content')
+<section class="content-header">
+      <h1>APPROVAL PINJAMAN 
+      <small>Formulir</small></h1>
+      <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="/pengajuanBendahara">Pinjaman Anggota</a></li>
+        <li class="active">Approval Pinjaman</a></li>
+      </ol>
+    </section>
+<!-- /.pembatas -->
+
+<session class="content">
+<!-- @if (count($errors) > 0)
+      <div class="alert alert-danger">
+          <ul>
+              @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+              @endforeach
+          </ul>
+      </div>
+      @endif      -->
+@foreach ($pinjaman as $key => $data)
+<form class="form-horizontal" action="/pinjamBendahara/update/{{$data->no_pinjaman}}" method="post" enctype="multipart/form-data">
+   @csrf
+      
+        <div class="col-md-12">
+          <div class="box box-primary">
+          <div class="box-header with-border bg-blue color-palette">
+          <h3 class="box-title">FORMULIR EDIT PINJAMAN (BENDAHARA)</h3>
+          <!-- <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool hint--top" aria-label="View/Hide" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <button type="button" class="btn btn-box-tool hint--top" aria-label="Close" data-widget="remove"><i class="fa fa-remove"></i></button>
+          </div> -->
+        </div>
+        <div class="box-body">
+        <table id="example1" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example1_info">
+              <thead>
+              <tr>
+              <th colspan="3" class="bg-primary color-palette"><h4>INFORMASI PEMOHON</h4></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+              <td >
+              <div class="box-body">
+              <div class="row">               
+                <div class="col-md-12 text-center">
+                <img class="profile-user-img img-responsive rounded-circle" src="{{ url('public/public/foto_pegawai/'.$data->foto_pegawai) }}" alt="">
+                <span class="
+                  <?php
+                    if($data->status == "NON AKTIF")
+                    echo 'label label-danger';
+                    else
+                    echo ' label label-success';
+                    ?>
+                    ">{{$data->status}}</span>
+              </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>NIK KTP</label>
+                </div>
+                
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->nik_ktp}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>NAMA LENGKAP</label>
+                </div>
+                
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->nama}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>NIK KARYAWAN</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->nik_karyawan}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>STATUS KEPEGAWAIAN</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->jabatan}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>TGL MASUK KERJA</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->tgl_masuk}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>USIA</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="<?php
+                    // tanggal lahir
+                    $tanggal = new DateTime($data->tgl_lahir);
+
+                    // tanggal hari ini
+                    $today = new DateTime('today');
+
+                    // tahun
+                    $y = $today->diff($tanggal)->y;
+
+                    // bulan
+                    $m = $today->diff($tanggal)->m;
+
+                    // hari
+                    $d = $today->diff($tanggal)->d;
+                    echo  $y . " Tahun " . $m . " Bulan " . $d . " Hari";
+                    ?>" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>NO. TELP</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->telp}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>ALAMAT</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->alamat}}" readonly>
+                </div>
+              </div>
+            </div>
+              </td>
+              </tr>
+              
+              </tbody>
+        </table>
+        <input name="tgl_disetujui_ketua" type="hidden" class="form-control" value="{{date(now())}}"readonly>
+        <input name="disetujui_ketua" type="hidden" class="form-control" value="{{Auth::user()->nik_ktp}}">
+        <input name="posisi" type="hidden" class="form-control" value="Belum BS" readonly>
+        <!-- /.col -->
+            <div class="box-header bg-blue color-palette">
+              <h3 class="box-title">DETAIL PINJAMAN</h3>
+            </div>
+            <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example1_info">
+              <thead>
+              <tr>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+              <td >
+              <div class="box-body">
+              <div class="row">
+                <div class="col-md-2">
+                  <label>KODE PINJAMAN</label>
+                </div>
+                
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="P-{{$data->no_pinjaman}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>TANGGAL PENGAJUAN</label>
+                </div>
+                
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->tgl_pengajuan}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>JENIS PINJAMAN</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->jenis_pinjaman}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>NAMA BARANG</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->nama_barang}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>MERK</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->merk}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>SPESIFIKASI</label>
+                </div>
+                <div class="col-md-10">
+                <input type="text" class="form-control" value="{{$data->spesifikasi}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>PLAFON</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->plafon}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>TENOR</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->tenor}} bulan" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>PERIODE ANGSURAN</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->periode_angsuran}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>PENGEMBANGAN</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->bunga}} %" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>TOTAL KREDIT</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="Rp. {{format_uang($data->total_kredit)}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>ANGSURAN</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="Rp. {{format_uang($data->angsuran)}} / bulan" readonly>
+                </div>
+              </div>
+            </div>
+              </td>
+              </tr>
+              
+              </tbody>
+        </table>
+            
+            <div class="box box-primary">
+            </div>
+            <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example1_info">
+              <thead>
+              <tr>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+              <td >
+              <div class="box-body">
+              <div class="row">
+                <div class="col-md-2">
+                  <label>TGL VERIFIKASI ADMIN</label>
+                </div>
+                
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->tgl_verifikasi}}" readonly>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label>NAMA ADMIN</label>
+                </div>
+                
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->verifikator}}" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                  <label>TGL APPROVAL HRBP</label>
+                </div>
+                
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->tgl_disetujui_hrbp}}" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                  <label>NAMA HRBP</label>
+                </div>
+                
+                <div class="col-md-10">
+                  @foreach ($users_hrbp as $hrbp)
+                  <input type="text" class="form-control" value="{{$hrbp->name}}" readonly>
+                  @endforeach
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                  <label>TGL APPROVAL KETUA</label>
+                </div>
+                
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="{{$data->tgl_disetujui_ketua}}" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                  <label>NAMA KETUA</label>
+                </div>
+                
+                <div class="col-md-10">
+                  @foreach ($users_ketua as $ketua)
+                  <input type="text" class="form-control" value="{{$ketua->name}}" readonly>
+                  @endforeach
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                  <label>STATUS APLIKASI</label>
+                </div>
+                
+                <div class="col-md-10">
+                <select name="posisi" type="text" class="form-control select2 select2-accessible" style="width: 100%;" data-select2-id="3" tabindex="-1" aria-hidden="true" value="{{$data->posisi}}">
+                      <option value="{{$data->posisi}}"readonly>{{$data->posisi}} (current)</option>
+                      <option value="
+                      <?php
+                      if($data->jenis_pinjaman == 'Pinjaman Sosial')
+                      echo 'Non Pengembangan';
+                      else
+                      echo 'Belum Akad'?>">Pencairan</option>
+                  </select>  
+                </div>
+            </div>
+              </td>
+              </tr>
+              
+              </tbody>
+        </table>
+
+            <div class="row">
+                <input name="notifikasi" type="hidden" class="form-control" value="Re: Pinjaman {{$data->nama}}" readonly>
+                @endforeach
+                <div class="col-md-12">
+                <a href="/pengajuanBendahara" type="button"class="btn btn-default pull-left"><i class="fa fa-arrow-circle-left"></i>  BACK</a>
+                  <button type="submit" class="btn btn-primary pull-right">SUBMIT</button>
+                </div>
+              </div>
+            </div>
+  </div>
+</form>
+</session>
+<!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.css"> -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
+<link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.css" rel="stylesheet"> 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+@endsection
