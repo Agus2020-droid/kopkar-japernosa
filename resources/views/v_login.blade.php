@@ -67,7 +67,17 @@
               </span>
               @enderror            
             </div>
-
+          <div class="row">
+            <div class="col-6">
+                {!! NoCaptcha::display() !!}
+                {!! NoCaptcha::renderJs() !!}
+                @error('g-recaptcha-response')
+                <span class="text-danger" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+        </div><br>
             <div class="form-prompt-wrapper">
               <div class="form-check">
               <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
