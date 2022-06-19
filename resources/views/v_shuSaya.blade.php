@@ -18,21 +18,23 @@
           <!-- /.box -->
 
           <div class="box">
-          <div class="box-header bg-blue-active color-palette">
-              <div class="row">
-                  <div class="col-sm-3 ">
-                    <ul class="list-group ">
-                      <li class="list-group">
-                        @foreach ($pegawai as $item)
-                        <b>NAMA</b> <p class="pull-right"> {{$item->nama}}</p>
-                      </li>
-                      <li class="list-group">
-                        <b>NIK</b> <p class="pull-right">{{$item->nik_karyawan}}</p>
-                        @endforeach
-                      </li>
-                    </ul>
-                  </div>
-              </div>
+          <div class="box-header bg-gray-active">
+              <table>
+                  <tbody>
+                  @foreach ($pegawai as $item)
+                    <tr style="font-size:16px;height: 20px">
+                      <td width="40%">NAMA</td>
+                      <td width="20%">:</td>
+                      <td width="40%">{{$item->nama}}</td>
+                    </tr>
+                    <tr style="font-size:16px;height: 40px">
+                      <td>NIK KARYAWAN</td>
+                      <td>:</td>
+                      <td>{{$item->nik_karyawan}}</td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>  
             </div>
             <!-- /.box-header -->
             <div class="box-header">

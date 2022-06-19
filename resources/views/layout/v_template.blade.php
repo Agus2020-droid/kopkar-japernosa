@@ -34,7 +34,11 @@
   <link rel="stylesheet" href="{{asset('template/')}}/dist/css/AdminLTE.min.css">
   <!-- Hint style -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hint.css/2.5.0/hint.min.css">
-  
+  <!-- summernote -->
+  <link rel="stylesheet" href="{{asset('template/')}}/plugins/summernote/summernote-bs4.min.css">
+  <!-- jvectormap -->
+  <link rel="stylesheet" href="{{asset('template/')}}/bower_components/jvectormap/jquery-jvectormap.css">
+
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="{{asset('template/')}}/dist/css/skins/_all-skins.min.css">
@@ -97,22 +101,14 @@
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
 
-        <!-- @if(Auth::user()) -->
           <li class="dropdown messages-menu" >
             <a href="#" class="dropdown-toggle" >
-              <!--<span class="glyphicon glyphicon-dashboard">-->
                   <i><span>{{Carbon\Carbon::parse(date(now()))->isoformat("dddd, D MMM Y")}}</span> <i class="glyphicon glyphicon-minus"> </i> <span id="jam"></span> : 
                   <span id="menit"></span> :
                   <span id="detik"></span></i>
-                  <!--</span>-->
-               <!-- @if(count(auth()->user()->unreadNotifications)) -->
-              <!-- <span class="label label-danger">{{count(auth()->user()->unreadNotifications)}}</span> -->
-              <!-- @endif -->
             </a>
 
           </li>
-          <!-- @endif -->
-          <!-- Control Sidebar Toggle Button -->
           <li class="dropdown messages-menu ">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
               <i class="fa fa-bell-o"></i>
@@ -126,7 +122,7 @@
             </a>
             @if(Auth::user())
             <ul class="dropdown-menu ">
-              <li class="header bg-blue-active">You have {{count(auth()->user()->unreadNotifications)}} messages</li>
+              <li class="header bg-blue">Anda memiliki {{count(auth()->user()->unreadNotifications)}} pesan yang belum dibaca</li>
               <li>
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu">
@@ -134,15 +130,12 @@
                   <li><!-- start message -->
                     <a href="{{ route('markRead') }}">
                       <div class="pull-left">
-                        <button class="btn-github">{{substr($notification->data['user']['name'],0,1)}}
-                        </button>
-                        <!--<img src="{{asset('public/public/foto_user/'.strip_tags($notification->data['user']['foto_user']))}}" class="img-circle" alt="User Image">-->
+                        <img src="{{asset('public/public/foto_user/'.strip_tags($notification->data['request']['foto_user']))}}" class="img-circle" alt="User Image">
                       </div>
-                      <h4>
-                      {{strip_tags($notification->data['user']['name'])}}
-                        <small><i class="fa fa-clock-o"></i> {{Carbon\Carbon::parse($notification->created_at)->format("d/m/y")}}</small>
+                      <h4 class="text-blue"><strong>
+                      {{strip_tags($notification->data['request']['name'])}}</strong> 
                       </h4>
-                      <p><i>{{strip_tags($notification->data['request']['notifikasi'])}}</i></p>
+                      <p><i>{{strip_tags($notification->data['request']['notifikasi'])}}</i><br><i class="fa fa-clock-o"></i>&nbsp{{Carbon\Carbon::parse($notification->created_at)->diffForHumans()}}</p>
                     </a>
                   </li>
                   <!-- end message -->
@@ -185,7 +178,6 @@
                 {{ Auth::user()->name }}
                   <small>{{ Auth::user()->email }}</small>
                 </p>
-                <!-- <a class="btn btn-default" href="/users/editPhoto">Change Photo Profile</a> -->
               </li>
               <!-- Menu Body -->
               <li class="user-body">
@@ -211,9 +203,6 @@
               </li>
             </ul>
           </li>
-
-         
-
         </ul>
       </div>
     </nav>
@@ -247,11 +236,6 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    
-    
-
-    <!-- Main content -->
-    <section class="content">
     
      @yield('content')
     <div class="box-header">
@@ -376,8 +360,14 @@
 <!-- DataTables -->
 <script src="{{asset('template/')}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="{{asset('template/')}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- Sparkline -->
+<script src="{{asset('template/')}}/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+  <!-- jvectormap  -->
+<script src="{{asset('template/')}}/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="{{asset('template/')}}/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<!-- ChartJS -->
+<script src="{{asset('template/')}}/bower_components/chart.js/Chart.js"></script>
 <!-- Toastr -->
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script>
   @if(Session::has('message'))
@@ -520,6 +510,31 @@ $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
 $(document).ready(function(){
 $(".preloader").fadeOut();
 })
+</script>
+<!-- Summernote -->
+<script src="{{asset('template/')}}/plugins/summernote/summernote-bs4.min.js"></script>
+<script>
+  $(function () {
+    // Summernote
+    $('#summernote').summernote()
+
+    // CodeMirror
+    CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
+      mode: "htmlmixed",
+      theme: "monokai"
+    });
+  })
+
+  $(function () {
+    // Summernote
+    $('#summernote2').summernote()
+
+    // CodeMirror
+    CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
+      mode: "htmlmixed",
+      theme: "monokai"
+    });
+  })
 </script>
 </body>
 </html>

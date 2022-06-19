@@ -19,7 +19,7 @@ class Admin
         if (auth()->user()->level == 2) {
             return $next($request);
         }
-        return redirect('/');
+        return redirect('/home');
         
     }
 }

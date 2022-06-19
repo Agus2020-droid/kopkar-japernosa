@@ -81,7 +81,13 @@
                   <td class="text-right">@currency($sim->total_simpanan_wajib)</td>
                   <td class="text-right">@currency($sim->total_simpanan_sukarela)</td>
                   <td class="text-right">@currency($sim->total_jumlah_simpanan)</td>
-                  <td><a href="{{ url('simpanan/detailSimpanan/'.$sim->nik_ktp) }}"  class="btn btn-primary btn-sm">Detail</a></td>
+                  <td>
+                    @if(auth()->user()->level == 6)
+                    <a href="{{ url('simpanan/detailSimpanan/'.$sim->nik_ktp) }}"  class="btn btn-primary btn-sm">Detail</a>
+                    @elseif(auth()->user()->level == 2)
+                    <a href="{{ url('simpananAdmin/detailSimpanan/'.$sim->nik_ktp) }}"  class="btn btn-primary btn-sm">Detail</a>
+                  @endif
+                  </td>
                   </tr>
                   @endforeach
                   </tbody>

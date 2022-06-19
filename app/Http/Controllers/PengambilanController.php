@@ -97,7 +97,11 @@ class PengambilanController extends Controller
     {
         $users = User::all()
         ->whereIn('level',[2, 6, 5]);
-
+        $notif = [
+            'notifikasi' => Request()->notifikasi,
+            'foto_user' => Request()->foto_user,
+            'name' => Request()->name,
+        ];
         Request()->validate([
             'nik_ktp' => 'required',
             'jumlah_pengambilan' => 'required',
@@ -127,7 +131,6 @@ class PengambilanController extends Controller
             'simpanan_wajib' => Request()->simpanan_wajib,
             'simpanan_sukarela' => Request()->simpanan_sukarela,
             'jumlah_pengambilan' => Request()->jumlah_pengambilan,
-            'notifikasi' => Request()->notifikasi,
             'paklaring' => $filename,
         ];
         $this->PengambilanModel->tambahPengambilan($request);
@@ -144,7 +147,7 @@ class PengambilanController extends Controller
             ];
             $this->PengambilanModel->tambahPengambilan($request);
         }
-        Notification::send($users, new RepliedToThread($request));
+        Notification::send($users, new RepliedToThread($notif));
         return redirect('pengambilanSaya/'.auth()->user()->nik_ktp)->with('success', 'Selamat, pengajuan penarikan dana simpanan anda berhasil dikirim! ');
     }
 
@@ -159,14 +162,9 @@ class PengambilanController extends Controller
 
     public function editPengambilanKetua($id_pengambilan)
     {
-        // $id_user = PengambilanModel::where('id_pengambilan',$id_pengambilan)
-        // ->pluck('id_user');
-        
-        // $users = User::whereIn('id', $id_user)
-        // ->first();
-
         $pengambilan = PengambilanModel::where('id_pengambilan',$id_pengambilan)
         ->join('pegawai','pengambilan.nik_ktp','=','pegawai.nik_ktp')
+        ->join('users','pengambilan.nik_ktp','=','users.nik_ktp')
         ->get();
 
         // dd($users);
@@ -177,6 +175,7 @@ class PengambilanController extends Controller
     {
         $pengambilan = PengambilanModel::where('id_pengambilan',$id_pengambilan)
         ->join('pegawai','pengambilan.nik_ktp','=','pegawai.nik_ktp')
+        ->join('users','pengambilan.nik_ktp','=','users.nik_ktp')
         ->get();
 
         // dd($users);
@@ -202,15 +201,18 @@ class PengambilanController extends Controller
         $users = user::where('id',$id_user)
         ->orWhereIn('level',[2,6])
         ->get();
-
+        $notif = [
+            'notifikasi' => Request()->notifikasi,
+            'foto_user' => Request()->foto_user,
+            'name' => Request()->name,
+        ];
         $request = [
             'ttd_ketua' => Request()->ttd_ketua,
             'tgl_disetujui_ketua' => Request()->tgl_disetujui_ketua,
             'disetujui_ketua' => Request()->disetujui_ketua,
-            'notifikasi' => Request()->notifikasi,
         ];
         $this->PengambilanModel->editPengambilan($id_pengambilan, $request);
-        Notification::send($users, new RepliedToThread($request));
+        Notification::send($users, new RepliedToThread($notif));
         return redirect('/pengambilanKetua')->with('pesan', 'Sukses, pengajuan penarikan dana simpanan anda berhasil diupdate!, Cek !! ');
     }
 
@@ -222,15 +224,18 @@ class PengambilanController extends Controller
         $users = user::where('id',$id_user)
         ->orWhereIn('level',[2,5])
         ->get();
-
+        $notif = [
+            'notifikasi' => Request()->notifikasi,
+            'foto_user' => Request()->foto_user,
+            'name' => Request()->name,
+        ];
         $request = [
             'ttd_bendahara' => Request()->ttd_bendahara,
             'tgl_disetujui_bendahara' => Request()->tgl_disetujui_bendahara,
             'disetujui_bendahara' => Request()->disetujui_bendahara,
-            'notifikasi' => Request()->notifikasi,
         ];
         $this->PengambilanModel->editPengambilan($id_pengambilan, $request);
-        Notification::send($users, new RepliedToThread($request));
+        Notification::send($users, new RepliedToThread($notif));
         return redirect('/pengambilanBendahara')->with('pesan', 'Sukses, pengajuan penarikan dana simpanan anda berhasil diupdate!, Cek !! ');
     }
 

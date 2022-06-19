@@ -2,8 +2,6 @@
 @section('title','ANGGOTA KOPKAR JAPERNOSA')
 
 @section('content')
-<!-- DataTables -->
-  <link rel="stylesheet" href="{{asset('template/')}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 <!-- Content Header (Page header) -->
 <section class="content-header">
       <h1>@yield('title')
@@ -40,97 +38,52 @@
               </div>
             
               <div class="pull-right">
-                <a href="/pendaftaran" target="_blank"class="btn btn-default btn-sm hint--top" aria-label="Cetak Form Pendaftaran"><i class="fa fa-user"></i></a>
+                <a href="/cetakPendaftaran" target="_blank"class="btn btn-default btn-sm hint--top" aria-label="Cetak Form Pendaftaran"><i class="fa fa-user"></i></a>
                 <a href="/tambah" class="btn btn-success btn-sm hint--top" aria-label="Tambah Anggota"><i class="fa fa-plus"></i></a>
                 <a href="{{ route('exportpegawai')}}" class="btn btn-default btn-sm hint--top" aria-label="Download"><i class="fa fa-download"></i></a>
                 <a href="#"  class="btn btn-warning btn-sm hint--top" aria-label="Upload" data-toggle="modal" data-target="#modal-warning"><i class="fa fa-upload"></i></a>
               </div>
             </div>
 
-  <div class="box box-header" style="border-width: 3px; padding: 1.5em .5em .5em;border-radius: 0.5em;">
+  <div class="table-responsive" style="border-width: 3px; padding: 1.5em .5em .5em;">
 
-  <!-- /.box-header -->
-  <table id="example1" class="table table-bordered table-hover">
-    <thead class="hidden">
+  <table id="example1" class="table table-hover text-nowrap table-striped">
+    <thead>
       <tr>
-        <th></th>
+        <th>#</th>
+        <th>Nama</th>
+        <th>Tgl Lahir</th>
+        <th>Status</th>
+        <th>Keanggotaan</th>
+        <th>Action</th>
       </tr>
     </thead>
-    <body>
+    <tbody>
+    <?php $no=1; ?>
     @foreach ($pegawai as $key => $item)
-    <tr>
-      <td>      
-      <section class="content-center">
-            <div class="card card-solid">
-              <div class="card-body pb-0">
-                <div class="row">
-                  <div class="col-sm-12 ">
-                    <div class="box-header border-primary box-comments" style="border-width: 3px; padding: 1.5em .5em .5em;
-          box-shadow: 0 5px 10px rgba(0,0,0,.2);">
-                    <div class="card bg-light d-flex flex-fill">
-                      <div class="card-header text-muted border-bottom-0">
-                        
-                      </div>
-                      <div class="card-body pt-0">
-                        <div class="row">
-                        <div class="col-sm-4 text-center">
-                            <img src="{{ asset('public/public/foto_pegawai/'.$item->foto_pegawai) }}" alt="user-avatar" class="profile-user-img img-responsive img-circle" style="height: 120px;width: 120px;">
-                            <small class="description">Terakhir Login<br> {{ \Carbon\Carbon::parse($item->last_seen)->diffForHumans() }}</small>
-                          </div>
-                          <div class="col-sm-8" >
-                            <h3 class="text-blue"><b>{{$item->nama}}</b></h3>
-                            <p class="text-muted"><b>NIK KTP : </b> {{$item->nik_ktp}} <br>
-                      <b>Status Keanggotaan : </b><i class="fa fa-circle 
-                          <?php
-                        if($item->status == 'AKTIF')
-                        echo 'text-success';
-                        else 
-                        echo 'text-danger';
-                        ?>"></i> {{$item->status}} </p>
-                        
-                      <div class="progress-bar" style="width: 100%;height: 3px;"></div><br>
-                    
-                            <ul class="md-4 mb-2 fa-ul text-muted">
-                              <li class="small"><span class="fa-li"><i class="fa fa-lg fa-building"></i></span> <p>Alamat : {{$item->alamat}}</p></li>
-                              <li class="small"><span class="fa-li"><i class="fa fa-lg fa-calendar"></i></span> <p>Lahir : {{$item->tempat_lahir}}, {{Carbon\Carbon::parse($item->tgl_lahir)->isoformat("D MMMM YYYY")}}</p></li>
-                              <li class="small"><span class="fa-li"><i class="fa fa-lg fa-phone"></i></span> <p>No. HP : {{$item->telp}}</p></li>
-                              <li class="small"><span class="fa-li"><i class="fa fa-lg fa-envelope-o"></i></span> <p>Email : {{$item->email}}</p></li>
-                            </ul>
-                          </div>
-
-            
-                        </div>
-                      </div>
-                      <div class="card-footer">
-                        <div class="text-right">
-                          <a href="{{ url('pegawai/edit/'.$item->nik_ktp) }}" class="btn btn-sm bg-teal">
-                            <i class="fa fa-pencil"></i>
-                          </a>
-                          <a type="button" class="btn btn-danger btn-sm hint--top" aria-label="Hapus" data-toggle="modal" data-target="#delete{{$item->nik_ktp}}">
-                            <i class="fa fa-trash"></i>
-                          </a>
-                          <a href="{{ url('anggota/'.$item->nik_ktp) }}" class="btn btn-sm btn-primary">
-                            <i class="fa fa-eye"></i> View Profile
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-
-                    </div>
-
-                  </div>
-                  
-                </div>
-              </div>
-              <!-- /.card-body -->
-
-            </div>
-      </section>
-      </td>
-    </tr>
-    @endforeach     
-    </body> 
+      <tr>
+      <td>{{ $no++}}</td>
+        <td>{{$item->nama}}</td>
+        <td>{{$item->tgl_lahir}}</td>
+        <td>{{$item->jabatan}}</td>
+        <td><span 
+        <?php
+        if($item->status == "AKTIF")
+        echo 'class="label label-success"';
+        else
+        echo 'class="label label-danger"';
+        ?>>
+        {{$item->status}}</span></td>
+        <td>
+          <a href="{{ url('anggota/'.$item->nik_ktp) }}" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i> View</a>
+          <a href="{{ url('pegawai/edit/'.$item->nik_ktp) }}" class="btn btn-sm bg-teal"><i class="fa fa-pencil"></i></a>
+          <a type="button" class="btn btn-danger btn-sm hint--top" aria-label="Hapus" data-toggle="modal" data-target="#delete{{$item->nik_ktp}}"><i class="fa fa-trash"></i></a>
+        </td>
+      </tr>
+      @endforeach
+    </tbody>
   </table>
+
             
 
                 @foreach ($pegawai as $item)

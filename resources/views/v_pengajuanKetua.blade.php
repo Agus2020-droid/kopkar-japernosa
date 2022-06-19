@@ -96,42 +96,44 @@
                 <td >{{format_uang($data->plafon)}}<br><small class="text-blue">{{$data->jenis_pinjaman}}</small></td>
   
                 <td >{{$data->telp}}</td>
-                <td >
-                  
+                <td style="font-size: 22px">
+                  <center>
                   <?php
                     if($data->status_pengajuan == "WAITING VERIFIED")
-                    echo '<span class="badge bg-yellow"><i class="fa fa-clock-o"></i></span>';
+                    echo '<i class="fa fa-warning text-orange"></i>';
                     elseif ($data->status_pengajuan == "PENDING")
-                    echo '<span class="badge bg-gray"><i class="fa fa-history"></i></span>';
+                    echo '<i class="fa fa-stop-circle text-yellow"></i>';
                     elseif ($data->status_pengajuan == "VERIFIED")
-                    echo '<span class="badge bg-green"><i class="fa fa-check-circle bg-green"></i></span>';
+                    echo '<i class="fa fa-check-circle text-green"></i>';
                     else 
-                    echo '<span class="badge bg-red"><i class="fa fa-ban"></i></span>';
-                    ?>
+                    echo '<i class="fa fa-ban text-red"></i>';
+                    ?></center>
                 </td>
-                <td>
+                <td style="font-size: 22px">
+                <center>
                   <?php
                     if($data->ttd_hrbp == "WAITING APPROVAL")
-                    echo '<span class="badge bg-yellow"><i class="fa fa-clock-o"></i></span>';
+                    echo '<i class="fa fa-warning text-orange"></i>';
                     elseif ($data->ttd_hrbp == "APPROVED")
-                    echo '<span class="badge bg-green"><i class="fa fa-check-circle bg-green"></i></span>';
+                    echo '<i class="fa fa-check-circle text-green"></i>';
                     elseif ($data->ttd_hrbp == "PENDING")
-                    echo '<span class="badge bg-gray"><i class="fa fa-history"></i></span>';
+                    echo '<i class="fa fa-stop-circle text-yellow"></i>';
                     else 
-                    echo '<span class="badge bg-red"><i class="fa fa-ban"></i></span>';
-                    ?>
+                    echo '<i class="fa fa-ban text-red"></i>';
+                    ?></center>
                 </td>
-                <td>
-                <?php
+                <td style="font-size: 22px">
+                <center>
+                  <?php
                     if($data->ttd_ketua == "WAITING APPROVAL")
-                    echo '<span class="badge bg-yellow"><i class="fa fa-clock-o"></i></span>';
+                    echo '<i class="fa fa-warning text-orange"></i>';
                     elseif ($data->ttd_ketua == "APPROVED")
-                    echo '<span class="badge bg-green"><i class="fa fa-check-circle bg-green"></i></span>';
+                    echo '<i class="fa fa-check-circle text-green"></i>';
                     elseif ($data->ttd_ketua == "PENDING")
-                    echo '<span class="badge bg-gray"><i class="fa fa-history"></i></span>';
+                    echo '<i class="fa fa-stop-circle text-yellow"></i>';
                     else 
-                    echo '<span class="badge bg-red"><i class="fa fa-ban"></i></span>';
-                    ?>
+                    echo '<i class="fa fa-ban text-red"></i>';
+                    ?></center>
                 </td>
                 
                 <td><h5

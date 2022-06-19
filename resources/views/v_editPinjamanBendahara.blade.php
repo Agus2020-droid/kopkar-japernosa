@@ -149,9 +149,6 @@
               
               </tbody>
         </table>
-        <input name="tgl_disetujui_ketua" type="hidden" class="form-control" value="{{date(now())}}"readonly>
-        <input name="disetujui_ketua" type="hidden" class="form-control" value="{{Auth::user()->nik_ktp}}">
-        <input name="posisi" type="hidden" class="form-control" value="Belum BS" readonly>
         <!-- /.col -->
             <div class="box-header bg-blue color-palette">
               <h3 class="box-title">DETAIL PINJAMAN</h3>
@@ -363,7 +360,9 @@
         </table>
 
             <div class="row">
-                <input name="notifikasi" type="hidden" class="form-control" value="Re: Pinjaman {{$data->nama}}" readonly>
+                <input name="notifikasi" type="hidden" class="form-control" value="Re: Pinjaman {{$data->nama}}">
+                <input name="foto_user" type="hidden" value="{{auth()->user()->foto_user}}">
+                <input name="name" type="hidden" value="{{auth()->user()->name}}">
                 @endforeach
                 <div class="col-md-12">
                 <a href="/pengajuanBendahara" type="button"class="btn btn-default pull-left"><i class="fa fa-arrow-circle-left"></i>  BACK</a>

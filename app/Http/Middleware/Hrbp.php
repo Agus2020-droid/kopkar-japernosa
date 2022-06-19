@@ -19,6 +19,6 @@ class Hrbp
         if (auth()->user()->level == 4) {
             return $next($request);
         }
-        return redirect('/');
+        return redirect('/home');
     }
 }

@@ -313,21 +313,11 @@
                             <div class="col-md-2">
                               <label>CATATAN</label>
                             </div>
-                            <div class="col-md-10">
-                            
-                            
-                           
-                            <select name="note" type="text" class="form-control select2 select2-accessible" style="width: 100%;" data-select2-id="3" tabindex="-1" aria-hidden="true">
-                                  <option value="{{$data->note}}">{{$data->note}} (current)</option>
-                                  <option value="LANJUT APPROVAL HRD & KETUA">LANJUT APPROVAL HRD & KETUA</option>
-                                  <option value="LAIN-LAIN">LAIN-LAIN</option>
-                              </select> 
-                              
-                            <!-- <textarea name="note" id="myTextarea" class="textarea" value="{{Auth::user()->name}}{!!$data->note!!}"style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid rgb(221, 221, 221); padding: 10px;display: ;" placeholder="Place some text here"></textarea> -->
+                            <div class="col-md-10">  
+                            <textarea name="note" id="summernote" class="textarea" value="{{Auth::user()->name}}{!!$data->note!!}"style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid rgb(221, 221, 221); padding: 10px;display: ;" placeholder="Place some text here"></textarea>
                             @error('note')
                                 <span class="label label-danger">{{$message}}</span>
                                 @enderror
-                                <!-- <input type="hidden" name="_wysihtml5_mode" value="1"> -->
                             </div>
                           </div>
                         </div>
@@ -336,8 +326,10 @@
               </tbody>
             </table>
             <input name="tgl_verifikasi" type="hidden" class="form-control" value="{{Carbon\Carbon::parse(date(now()))->format("d-M-y H:i:s")}}" readonly>
-            <input name="verifikator" type="hidden" class="form-control" value="{{Auth::user()->name}}" readonly>
-            <input name="notifikasi" type="hidden" class="form-control" value="Verifikasi pinjaman {{$data->nama}}" readonly>
+            <input name="verifikator" type="hidden" class="form-control" value="{{Auth::user()->name}}" >
+            <input name="notifikasi" type="hidden" class="form-control" value="Verifikasi pinjaman {{$data->nama}}" >
+            <input name="foto_user" type="hidden" value="{{auth()->user()->foto_user}}">
+            <input name="name" type="hidden" value="{{auth()->user()->name}}">
             @endforeach
             <div class="col-md-12">
               <br>

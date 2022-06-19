@@ -28,10 +28,6 @@ class PinjamController extends Controller
         $this->middleware('auth');
     }
 
-    public function unreadNotifications() {
-        $unreadNotifications = Auth()->user()->unreadNotifications;
-        return response()->json($unreadNotifications);
-    }
 // admin
     public function index()
    {
@@ -52,8 +48,6 @@ class PinjamController extends Controller
     
         public function indexStatusPinjam()
     {
-       
-
             $pinjaman = PinjamanModel::select('angsuran','tenor','unit','spesifikasi','merk','nama_barang','nama','jenis_pinjaman','posisi','total_kredit','plafon','nama','pinjaman.nik_ktp','tgl_pengajuan','users.telp','pinjaman.no_pinjaman',DB::raw('sum(angsuran.jumlah_angsuran) as total_angsuran'))
 
             ->join('angsuran','angsuran.no_pinjaman','=','pinjaman.no_pinjaman')
@@ -79,7 +73,6 @@ class PinjamController extends Controller
         $pegawai = DB::table('pegawai')->get();
         $dataUser = UsersModel::all();
 
-
         // dd ($jumlahPinjaman);
         return view('v_pengajuan', compact('pinjaman','pegawai','dataUser','jumlahPinjaman'));
     }
@@ -89,7 +82,7 @@ class PinjamController extends Controller
         $fromDate = $request->input('fromDate');
         $toDate = $request->input('toDate');
         $dataUser = UsersModel::all();
-       $pinjaman = DB::table('pinjaman')->select()
+        $pinjaman = DB::table('pinjaman')->select()
        ->join('pegawai','pinjaman.nik_ktp', '=', 'pegawai.nik_ktp')
        ->join('users','pinjaman.nik_ktp', '=', 'users.nik_ktp')
        ->orderBy('tgl_pengajuan','desc')
@@ -108,17 +101,15 @@ class PinjamController extends Controller
         $fromDate = $request->input('fromDate');
         $toDate = $request->input('toDate');
         $dataUser = UsersModel::all();
-
-
-       $pinjaman = DB::table('pinjaman')->select()
-       ->join('pegawai','pinjaman.nik_ktp', '=', 'pegawai.nik_ktp')
-       ->join('users','pinjaman.nik_ktp', '=', 'users.nik_ktp')
-       ->orderBy('tgl_pengajuan','desc')
-       ->where('tgl_pengajuan',">=", $fromDate)
-       ->where('tgl_pengajuan',"<=", $toDate)
-       ->whereIn('posisi',['Pengajuan','Belum BS'])
-       ->get();
-       $jumlahPinjaman = $pinjaman->sum('plafon');
+        $pinjaman = DB::table('pinjaman')->select()
+        ->join('pegawai','pinjaman.nik_ktp', '=', 'pegawai.nik_ktp')
+        ->join('users','pinjaman.nik_ktp', '=', 'users.nik_ktp')
+        ->orderBy('tgl_pengajuan','desc')
+        ->where('tgl_pengajuan',">=", $fromDate)
+        ->where('tgl_pengajuan',"<=", $toDate)
+        ->whereIn('posisi',['Pengajuan','Belum BS'])
+        ->get();
+        $jumlahPinjaman = $pinjaman->sum('plafon');
 
     //    dd($query);
         return view('v_pengajuan',compact('pinjaman','dataUser','jumlahPinjaman'));
@@ -138,10 +129,61 @@ class PinjamController extends Controller
        
     }
 
+    public function store(Request $request, UsersModel $users)
+    {
+        $users = User::all()
+        ->whereIn('level',[2, 4, 5]);
+        $notif = [
+            'notifikasi' => Request()->notifikasi,
+            'foto_user' => Request()->foto_user,
+            'name' => Request()->name,
+        ];
+        Request()->validate([
+            'nama_barang' => 'required',
+            'spesifikasi' => 'required',
+            'plafon' => 'required',
+            'merk' => 'required',
+            'unit' => 'required',
+        ],[
+            'nama_barang.required'=>'Nama barang Wajib Diisi !!!',
+            'spesifikasi.required'=>'Spesifikasi Wajib Diisi !!!',
+            'plafon.required'=>'Plafon Wajib Diisi !!!',
+            'merk.required'=>'Merk Wajib Diisi !!!',
+            'unit.required'=>'Unit Wajib Diisi !!!',
+        ]);
+        $request = [
+            'id_user' => Request()->id_user,
+            'no_pinjaman' => Request()->no_pinjaman,
+            'nik_ktp' => Request()->nik_ktp,
+            'nama' => Request()->nama,
+            'nik_karyawan' => Request()->nik_karyawan,
+            'jabatan' => Request()->jabatan,
+            'jenis_pinjaman' => Request()->jenis_pinjaman,
+            'nama_barang' => Request()->nama_barang,
+            'merk' => Request()->merk,
+            'Spesifikasi' => Request()->spesifikasi,
+            'unit' => Request()->unit,
+            'plafon' => Request()->plafon,
+            'tenor' => Request()->tenor,
+            'angsuran' => Request()->angsuran,
+            'total_kredit' => Request()->total_kredit,
+
+        ];
+        $this->PinjamanModel->tambahPinjaman($request);
+        Notification::send($users, new RepliedToThread($notif));
+        // dd($users);
+        return redirect('pinjamanSaya/'.auth()->user()->nik_ktp)->with('success', 'Selamat, pengajuan pinjaman kredit anda berhasil dikirim!, Cek di data pinjaman Anda ');
+    } 
+
     public function storePinjaman(Request $request, UsersModel $users)
     {
         $users = User::all()
         ->whereIn('level',[2, 4, 5]);
+        $notif = [
+            'notifikasi' => Request()->notifikasi,
+            'foto_user' => Request()->foto_user,
+            'name' => Request()->name,
+        ];
         Request()->validate([
             'nama_barang' => 'required',
             'spesifikasi' => 'required',
@@ -174,13 +216,12 @@ class PinjamController extends Controller
             'plafon' => Request()->plafon,
             'tenor' => Request()->tenor,
             'angsuran' => Request()->angsuran,
-            'notifikasi' => Request()->notifikasi,
             'total_kredit' => Request()->total_kredit,
 
         ];
         $this->PinjamanModel->tambahPinjaman($request);
 
-        Notification::send($users, new RepliedToThread($request));
+        Notification::send($users, new RepliedToThread($notif));
         // dd($request);
         return redirect()->route('v_pengajuan')->with('pesan', 'Selamat, pengajuan pinjaman kredit anda berhasil dikirim!, Cek di data pinjaman Anda ');
     }
@@ -212,7 +253,11 @@ class PinjamController extends Controller
         $users = user::where('id',$id_user)
         ->orWhereIn('level',[2,4,5])
         ->get();
-
+        $notif = [
+            'notifikasi' => Request()->notifikasi,
+            'foto_user' => Request()->foto_user,
+            'name' => Request()->name,
+        ];
         $request = [
             'jenis_pinjaman' => Request()->jenis_pinjaman,
             'nama_barang' => Request()->nama_barang,
@@ -228,14 +273,152 @@ class PinjamController extends Controller
             'verifikator' => Request()->verifikator,
             'tgl_disetujui_ketua' => Request()->tgl_disetujui,
             'disetujui_ketua' => Request()->disetujui_ketua,
-            'notifikasi' => Request()->notifikasi,
             'plafon' => Request()->plafon,
             'note' => Request()->note,
         ];
         $this->PinjamanModel->editPinjaman($no_pinjaman, $request);
-        Notification::send($users, new RepliedToThread($request));
+        Notification::send($users, new RepliedToThread($notif));
         // dd ($users);
          return redirect()->route('v_pengajuan')->with('pesan', 'Data Berhasil Diupdate !!!');
+    }
+
+    public function updatePinjamHrbp(Request $request, $no_pinjaman)
+    {
+        $id_user = PinjamanModel::where('no_pinjaman', $no_pinjaman)
+        ->pluck('id_user');
+        
+        $users = user::where('id',$id_user)
+        ->orWhereIn('level',[2,4,5])
+        ->get();
+        $notif = [
+            'notifikasi' => Request()->notifikasi,
+            'foto_user' => Request()->foto_user,
+            'name' => Request()->name,
+        ];
+
+        Request()->validate([
+            'note' => 'required',
+            ],[  
+            'note.required'=>'*) Catatan tidak boleh kosong',
+            ]);
+        $request = [
+            'ttd_hrbp' => Request()->ttd_hrbp,
+            'tgl_disetujui_hrbp' => Request()->tgl_disetujui_hrbp,
+            'disetujui_hrbp' => Request()->disetujui_hrbp,
+            'notifikasi' => Request()->notifikasi,
+            'note' => Request()->note,
+        ];
+        $this->PinjamanModel->editPinjaman($no_pinjaman, $request);
+        Notification::send($users, new RepliedToThread($notif));
+        return redirect()->route('v_pengajuanHrbp')->with('pesan', 'Pengajuan telah disetujui, Cek di data pinjaman karyawan !!!');
+    }
+
+    public function updatePinjamKetua(Request $request, $no_pinjaman)
+    {
+        $id_user = PinjamanModel::where('no_pinjaman', $no_pinjaman)
+        ->pluck('id_user');
+        
+        $users = user::where('id',$id_user)
+        ->orWhereIn('level',[2,4,6])
+        ->get();
+        $notif = [
+            'notifikasi' => Request()->notifikasi,
+            'foto_user' => Request()->foto_user,
+            'name' => Request()->name,
+        ];
+        $request = [
+            'ttd_ketua' => Request()->ttd_ketua,
+            'tgl_disetujui_ketua' => Request()->tgl_disetujui_ketua,
+            'disetujui_ketua' => Request()->disetujui_ketua,
+            'posisi' => Request()->posisi,
+        ];
+        $this->PinjamanModel->editPinjaman($no_pinjaman, $request);
+        Notification::send($users, new RepliedToThread($notif));
+        // dd($users);
+        return redirect()->route('v_pengajuanKetua')->with('pesan', 'Cek di data pengajuan pinjaman');
+    }
+
+    public function updatePinjamBendahara(Request $request, $no_pinjaman)
+    {
+        $id_user = PinjamanModel::where('no_pinjaman', $no_pinjaman)
+        ->pluck('id_user');
+        
+        $users = user::where('id',$id_user)
+        ->orWhereIn('level',[2,4,5])
+        ->get();
+        $notif = [
+            'notifikasi' => Request()->notifikasi,
+            'foto_user' => Request()->foto_user,
+            'name' => Request()->name,
+        ];
+        Request()->validate([
+            'posisi' => 'required',
+            ],[  
+            'posisi.required'=>'*) Status tidak boleh kosong',
+            ]);
+        $request = [
+            'posisi' => Request()->posisi,
+        ];
+        $this->PinjamanModel->editPinjaman($no_pinjaman, $request);
+        Notification::send($users, new RepliedToThread($notif));
+        return redirect('/pinjamBendahara')->with('pesan', 'Status Pinjaman berhasil di update ');
+    }
+
+    public function updateAkad(Request $request,  $no_pinjaman) 
+    {
+        $id_user = PinjamanModel::where('no_pinjaman', $no_pinjaman)
+        ->pluck('id_user');
+
+        $users = user::where('id',$id_user)
+        ->orWhereIn('level',[2,4,5,6,7])
+        ->get();
+        $notif = [
+            'notifikasi' => Request()->notifikasi,
+            'foto_user' => Request()->foto_user,
+            'name' => Request()->name,
+        ];
+        Request()->validate([
+            'jenis_pinjaman' => 'required',
+            'nama_barang' => 'required',
+            'merk' => 'required',
+            'spesifikasi' => 'required',
+            'unit' => 'required',
+            'plafon' => 'required',
+            'tenor' => 'required',
+            'periode_angsuran' => 'required',
+            'total_kredit' => 'required',
+            'angsuran' => 'required',
+            'bunga' => 'required',
+            'posisi' => 'required',
+        ],[
+            'jenis_pinjaman.required'=>' Jenis pinjaman wajib Diisi !!!',
+            'nama_barang.required'=>' Nama barang/jasa wajib Diisi !!!',
+            'merk.required'=>' Merk wajib Diisi !!!',
+            'spesifikasi.required'=>' Spesifikasi wajib Diisi !!!',
+            'unit.required'=>' Unit wajib Diisi !!!',
+            'periode_angsuran.required'=>' Jatuh tempo wajib Diisi !!!',
+            'plafon.required'=>' Plafon wajib Diisi !!!',
+            'posisi.required'=>' Status wajib Diisi !!!',
+            'tenor.required'=>' Tenor wajib Diisi !!!',
+            'bunga.required'=>' Pengembangan wajib Diisi !!!',
+        ]);
+        $request = [
+            'jenis_pinjaman'=> Request()->jenis_pinjaman,
+            'nama_barang'=> Request()->nama_barang,
+            'merk'=> Request()->merk,
+            'spesifikasi'=> Request()->spesifikasi,
+            'unit'=> Request()->unit,
+            'periode_angsuran'=> Request()->periode_angsuran,
+            'plafon'=> Request()->plafon,
+            'tenor'=> Request()->tenor,
+            'total_kredit' => Request()->total_kredit,
+            'angsuran' => Request()->angsuran,
+            'posisi'=> Request()->posisi,
+            'bunga'=> Request()->bunga,
+        ];
+        $this->PinjamanModel->editPinjaman( $no_pinjaman, $request);
+        Notification::send($users, new RepliedToThread($notif));
+        return redirect('/pinjam')->with('pesan', 'Update data successfully');
     }
 
     public function editPinjaman($no_pinjaman)
@@ -351,50 +534,7 @@ class PinjamController extends Controller
         return view('v_cetakPinjamanPertanggal', compact('cetakPertanggal','fromDate','toDate','sumTotal'));
     }
 
-    public function updateAkad(Request $request,  $no_pinjaman) 
-    {
-        Request()->validate([
-            'jenis_pinjaman' => 'required',
-            'nama_barang' => 'required',
-            'merk' => 'required',
-            'spesifikasi' => 'required',
-            'unit' => 'required',
-            'plafon' => 'required',
-            'tenor' => 'required',
-            'periode_angsuran' => 'required',
-            'total_kredit' => 'required',
-            'angsuran' => 'required',
-            'bunga' => 'required',
-            'posisi' => 'required',
-        ],[
-            'jenis_pinjaman.required'=>' Jenis pinjaman wajib Diisi !!!',
-            'nama_barang.required'=>' Nama barang/jasa wajib Diisi !!!',
-            'merk.required'=>' Merk wajib Diisi !!!',
-            'spesifikasi.required'=>' Spesifikasi wajib Diisi !!!',
-            'unit.required'=>' Unit wajib Diisi !!!',
-            'periode_angsuran.required'=>' Jatuh tempo wajib Diisi !!!',
-            'plafon.required'=>' Plafon wajib Diisi !!!',
-            'posisi.required'=>' Status wajib Diisi !!!',
-            'tenor.required'=>' Tenor wajib Diisi !!!',
-            'bunga.required'=>' Pengembangan wajib Diisi !!!',
-        ]);
-        $request = [
-            'jenis_pinjaman'=> Request()->jenis_pinjaman,
-            'nama_barang'=> Request()->nama_barang,
-            'merk'=> Request()->merk,
-            'spesifikasi'=> Request()->spesifikasi,
-            'unit'=> Request()->unit,
-            'periode_angsuran'=> Request()->periode_angsuran,
-            'plafon'=> Request()->plafon,
-            'tenor'=> Request()->tenor,
-            'total_kredit' => Request()->total_kredit,
-            'angsuran' => Request()->angsuran,
-            'posisi'=> Request()->posisi,
-            'bunga'=> Request()->bunga,
-        ];
-        $this->PinjamanModel->editPinjaman( $no_pinjaman, $request);
-        return redirect('/pinjam')->with('pesan', 'Update data successfully');
-    }
+
 // Ketua
     public function indexKetua()
     {
@@ -483,27 +623,7 @@ class PinjamController extends Controller
         return view('v_editPinjamanKetua', compact('pinjaman','jml_angsuran','users_hrbp'));
     }
 
-    public function updatePinjamKetua(Request $request, $no_pinjaman)
-    {
-        $id_user = PinjamanModel::where('no_pinjaman', $no_pinjaman)
-        ->pluck('id_user');
-        
-        $users = user::where('id',$id_user)
-        ->orWhereIn('level',[2,4,6])
-        ->get();
 
-        $request = [
-            'ttd_ketua' => Request()->ttd_ketua,
-            'tgl_disetujui_ketua' => Request()->tgl_disetujui_ketua,
-            'disetujui_ketua' => Request()->disetujui_ketua,
-            'notifikasi' => Request()->notifikasi,
-            'posisi' => Request()->posisi,
-        ];
-        $this->PinjamanModel->editPinjaman($no_pinjaman, $request);
-        Notification::send($users, new RepliedToThread($request));
-        // dd($users);
-        return redirect()->route('v_pengajuanKetua')->with('pesan', 'Cek di data pengajuan pinjaman');
-    }
 
 
 
@@ -626,31 +746,7 @@ class PinjamController extends Controller
         return view('v_editPinjamanHrbp', compact('pinjaman','jml_angsuran'));
     }
 
-    public function updatePinjamHrbp(Request $request, $no_pinjaman)
-    {
-        $id_user = PinjamanModel::where('no_pinjaman', $no_pinjaman)
-        ->pluck('id_user');
-        
-        $users = user::where('id',$id_user)
-        ->orWhereIn('level',[2,4,5])
-        ->get();
 
-        Request()->validate([
-            'note' => 'required',
-            ],[  
-            'note.required'=>'*) Catatan tidak boleh kosong',
-            ]);
-        $request = [
-            'ttd_hrbp' => Request()->ttd_hrbp,
-            'tgl_disetujui_hrbp' => Request()->tgl_disetujui_hrbp,
-            'disetujui_hrbp' => Request()->disetujui_hrbp,
-            'notifikasi' => Request()->notifikasi,
-            'note' => Request()->note,
-        ];
-        $this->PinjamanModel->editPinjaman($no_pinjaman, $request);
-        Notification::send($users, new RepliedToThread($request));
-        return redirect()->route('v_pengajuanHrbp')->with('pesan', 'Pengajuan telah disetujui, Cek di data pinjaman karyawan !!!');
-    }
 
 // Pengurus
     public function indexPengurus()
@@ -854,28 +950,7 @@ class PinjamController extends Controller
         return view('v_pengajuanBendahara',compact('pinjaman','dataUser','jumlahPinjaman'));
     }
 
-    public function updatePinjamBendahara(Request $request, $no_pinjaman)
-    {
-        $id_user = PinjamanModel::where('no_pinjaman', $no_pinjaman)
-        ->pluck('id_user');
-        
-        $users = user::where('id',$id_user)
-        ->orWhereIn('level',[2,4,5])
-        ->get();
 
-        Request()->validate([
-            'posisi' => 'required',
-            ],[  
-            'posisi.required'=>'*) Status tidak boleh kosong',
-            ]);
-        $request = [
-            'notifikasi' => Request()->notifikasi,
-            'posisi' => Request()->posisi,
-        ];
-        $this->PinjamanModel->editPinjaman($no_pinjaman, $request);
-        Notification::send($users, new RepliedToThread($request));
-        return redirect('/pinjamBendahara')->with('pesan', 'Status Pinjaman berhasil di update ');
-    }
 
     public function editPinjamanBendahara($no_pinjaman)
     {
@@ -914,48 +989,7 @@ class PinjamController extends Controller
         return view('v_pinjamanSaya', compact(['pegawai','user','pinjaman','jml_pinjaman','jml_angsuran','total_kredit']));
     }
 
-    public function store(Request $request, UsersModel $users)
-    {
-        $users = User::all()
-        ->whereIn('level',[2, 4, 5]);
-        Request()->validate([
-            'nama_barang' => 'required',
-            'spesifikasi' => 'required',
-            'plafon' => 'required',
-            'merk' => 'required',
-            'unit' => 'required',
-        ],[
-            'nama_barang.required'=>'Nama barang Wajib Diisi !!!',
-            'spesifikasi.required'=>'Spesifikasi Wajib Diisi !!!',
-            'plafon.required'=>'Plafon Wajib Diisi !!!',
-            'merk.required'=>'Merk Wajib Diisi !!!',
-            'unit.required'=>'Unit Wajib Diisi !!!',
-        ]);
-     
-        $request = [
-            'id_user' => Request()->id_user,
-            'no_pinjaman' => Request()->no_pinjaman,
-            'nik_ktp' => Request()->nik_ktp,
-            'nama' => Request()->nama,
-            'nik_karyawan' => Request()->nik_karyawan,
-            'jabatan' => Request()->jabatan,
-            'jenis_pinjaman' => Request()->jenis_pinjaman,
-            'nama_barang' => Request()->nama_barang,
-            'merk' => Request()->merk,
-            'Spesifikasi' => Request()->spesifikasi,
-            'unit' => Request()->unit,
-            'plafon' => Request()->plafon,
-            'tenor' => Request()->tenor,
-            'angsuran' => Request()->angsuran,
-            'total_kredit' => Request()->total_kredit,
-            'notifikasi' => Request()->notifikasi,
 
-        ];
-        $this->PinjamanModel->tambahPinjaman($request);
-        Notification::send($users, new RepliedToThread($request));
-        // dd($users);
-        return redirect('pinjamanSaya/'.auth()->user()->nik_ktp)->with('success', 'Selamat, pengajuan pinjaman kredit anda berhasil dikirim!, Cek di data pinjaman Anda ');
-    }
 
     public function detailPinjamanSaya($no_pinjaman)
     {

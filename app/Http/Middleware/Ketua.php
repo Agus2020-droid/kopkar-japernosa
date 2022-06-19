@@ -19,6 +19,6 @@ class Ketua
         if (auth()->user()->level == 5) {
             return $next($request);
         }
-        return redirect('/');
+        return redirect('/home');
     }
 }

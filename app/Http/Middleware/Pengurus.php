@@ -19,6 +19,6 @@ class Pengurus
         if (auth()->user()->level == 7) {
             return $next($request);
         }
-        return redirect('/');
+        return redirect('/home');
     }
 }

@@ -50,12 +50,10 @@
                 <thead>
                 <tr>
                 <th class="bg-blue color-palette"><p class="text-center">No.</th>
-                <th class="bg-blue color-palette"><p class="text-center">Kode </th>
-                <th class="bg-blue color-palette"><p class="text-center">Tanggal Angsuran</th>
-                <th class="bg-blue color-palette"><p class="text-center">Kode Pinjaman </th>
-                <th class="bg-blue color-palette"><p class="text-center">NIK Karyawan </th>
+                <th class="bg-blue color-palette"><p class="text-center">Kode Pinjam </th>
                 <th class="bg-blue color-palette"><p class="text-center">Nama Anggota</th>
-                <th class="bg-blue color-palette"><p class="text-center">Nominal</th>
+                <th class="bg-blue color-palette"><p class="text-center">NIK Karyawan </th>
+                <th class="bg-blue color-palette"><p class="text-center">Total Angsuran</th>
                 <th class="bg-blue color-palette"><p class="text-center">Option</p></th>
                 </tr>
                 </thead>
@@ -64,80 +62,18 @@
                 @foreach ($angsuran as $key => $item)
                 <tr>
                   <td>{{ $no++}}</td>
-                  <td>A-{{ $item->id_angsuran}}</td>
-                  <td>{{tanggal_local($item->tgl_angsuran)}}</td>
                   <td>P-{{ $item->no_pinjaman}}</td>
-                  <td>{{ $item->nik_karyawan}}</td>
                   <td>{{ $item->nama}}</td>
-                  <td>@currency($item->jumlah_angsuran)</td>
+                  <td>{{ $item->nik_ktp}}</td>
+                  <td>@currency($item->total_angsuran)</td>
                   <td>
-                  <a href="/angsuran/edit/{{$item->id_angsuran}}" class="btn btn-warning btn-sm" ><i class="fa fa-pencil"></i></a>
-                  <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete{{$item->id_angsuran}}"><i class="fa fa-trash-o"></i></button>
+                  <a href="/angsuran/detail/{{$item->no_pinjaman}}" class="btn btn-primary btn-sm" ><i class="fa fa-eye"></i> View detail</a>
                   </td>
                 </tr>
                 @endforeach
                 </tbody>
               </table>
 
-              @foreach ($angsuran as $data)
-              <div class="modal modal-danger fade" id="delete{{$data->id_angsuran}}" style="display: none;">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title">Kode Pinjaman [A-{{$data->id_angsuran}}]</h4><hr>
-                    <div class="col-12">
-                      <div class="col-sm-4">
-                        Nama Karyawan <br>
-                        Nik           <br>
-                        Status        <br>
-                      </div>
-                      <div class="col-sm-1">
-                        :<br>
-                        :<br>
-                        :<br>
-                      </div>
-                      <div class="col-sm-4">
-                        {{$data->nama}}<br>
-                        {{$data->nik_karyawan}}<br>
-                        {{$data->jabatan}}<br><br>
-                      </div>
-                    </div>
-                    
-                    <div class="col-12">
-                    <h6><p></p></h6>
-                      <div class="col-sm-4">
-                        Tgl Angsuran<br>
-                        No. Pinjaman<br>
-                        Jumlah Angsuran<br>
-                      </div>
-                      <div class="col-sm-1">
-                        :<br>
-                        :<br>
-                        :<br>
-                        :<br>
-                      </div>
-                      <div class="col-sm-4">
-                        {{tanggal_local($data->tgl_angsuran)}}<br>
-                        P-{{$data->no_pinjaman}}<br>
-                        {{"Rp. ".format_uang($data->jumlah_angsuran)}}<br>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal-body">
-                  Apakah yakin akan menghapus data ini ?
-                   
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Batal</button>
-                    <a href="/angsuran/delete/{{$data->id_angsuran}}" class="btn btn-outline">Hapus</a>
-                  </div>
-                </div>
-                <!-- /.modal-content -->
-              </div>
-            </div>
-          @endforeach
           <!-- /.modal-import-->
           <div class="modal modal-primary fade" id="modal-warning" style="display: none;">
               <div class="modal-dialog">

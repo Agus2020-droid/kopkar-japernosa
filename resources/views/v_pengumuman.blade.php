@@ -1,8 +1,5 @@
 @extends ('layout.v_template')
 @section('title','Pengumuman')
-
-
-
 @section('content')
 <section class="content-header">
       <h1>PENGUMUMAN
@@ -72,9 +69,9 @@
             <!-- form start -->
             <form class="form-horizontal" action="{{ route('simpanPengumuman') }}" method="post" enctype="multipart/form-data">
             {{csrf_field()}}
-              <div class="box-body">
+              <div class="box-body" style="padding: 20px">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Judul</label>
+                  <label>Judul</label>
                   <input name="judul" type="text" class="form-control" id="judul" placeholder="Masukan Judul">
                 </div>
                 <div class="form-group">
@@ -87,20 +84,17 @@
                     </select>
                 </div>
                 <div class="form-group">
-                  <textarea name="isi" id="myTArea" class="textarea" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid rgb(221, 221, 221); padding: 10px;display: ;" placeholder="Place some text here"></textarea>
-                <input type="hidden" name="_wysihtml5_mode" value="1">
-                  <!--<textarea id="wysihtml5"class="form-control" name="isi"></textarea>-->
+                  <textarea name="isi" id="summernote"  style="width: 100%; height: 200px;" placeholder="Place some text here"></textarea>
                 </div>
                 <div class="form-group">
-                  <!--<div class="btn btn-default btn-file">-->
-                  <!--  <i class="fa fa-paperclip"></i> Attachment-->
-                  <!--  <input type="file" name="lampiran">-->
-                  <!--</div>-->
-                  <input type="file" name="lampiran">
-                  <p class="help-block text-red">File berekstensi pdf,jpg,jpeg,bmp,png,max:1024 mb</p>
+                  <label>Gambar</label>
+                  <input type="file" name="lampiran" class="form-control">
+                  <p class="help-block text-red">File berekstensi jpg,jpeg,bmp,png,max:1024 mb</p>
                 </div>
                 <input name="tgl_pengumuman" type="hidden" class="form-control"  value="{{date(now())}}">
                 <input name="author" type="hidden" class="form-control" value="{{auth()->user()->name}}">
+                <input name="foto_user" type="hidden" value="{{auth()->user()->foto_user}}">
+                <input name="name" type="hidden" value="{{auth()->user()->name}}">
 
               </div>
               <!-- /.box-body -->

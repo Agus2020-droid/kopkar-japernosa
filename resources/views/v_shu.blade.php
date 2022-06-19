@@ -128,6 +128,8 @@
                             {{csrf_field()}}
                               <div class="form-group">
                                 <input type="text" name="notifikasi" class="form-control" placeholder="Masukan pesan notifikasi">
+                                <input type="hidden" name="name" value="{{auth()->user()->name}}">
+                                <input type="hidden" name="foto_user" value="{{auth()->user()->foto_user}}">
                               </div>
                           </div>
                           <div class="modal-footer">

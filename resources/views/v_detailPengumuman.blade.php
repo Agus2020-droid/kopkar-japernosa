@@ -7,7 +7,7 @@
 @foreach ($data as $item)
       <h1>{{$item->judul}}</h1>
       <div class="pull-left">
-      <small><i class="fa fa-user"> by : {{$item->author}}</i></small>
+      <small><i class="fa fa-user"> by : {{$item->author}}</i> </small><br> Total view : <i class="fa fa-eye"></i> {{$item->views}}
       </div>
       <div class="pull-right">
       <p>Posting date : {{$item->tgl_pengumuman}}</p>

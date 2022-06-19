@@ -13,15 +13,15 @@
   </section>
 
 <section class="content">
-@if (count($errors) > 0)
-          <div class="alert alert-danger">
-              <ul>
-                  @foreach ($errors->all() as $error)
-                      <li>{{ $error }}</li>
-                  @endforeach
-              </ul>
-          </div>
-          @endif
+    @if (count($errors) > 0)
+      <div class="alert alert-danger">
+          <ul>
+              @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+              @endforeach
+          </ul>
+      </div>
+    @endif
     <div class="row">
       <!-- left column -->
       <div class="col-md-12">
@@ -36,18 +36,17 @@
           @csrf  
           <div class="box-body">
             @foreach ($pegawai as $item)
-              <input name="tgl_pengambilan" type="hidden" class="form-control" value="{{tanggal_local(date(now()))}}" readonly>
-              <input name="id_user" type="hidden" class="form-control" value="{{Auth::user()->id}}" readonly>
-              <input name="notifikasi" type="hidden" class="form-control" value="Penarikan dana simpanan" >
+              <input name="tgl_pengambilan" type="hidden" class="form-control" value="{{tanggal_local(date(now()))}}">
+              <input name="id_user" type="hidden" class="form-control" value="{{Auth::user()->id}}" >
+              <input name="notifikasi" type="hidden" class="form-control" value="Tarik dana simpanan" >
+              <input name="foto_user" type="hidden" class="form-control" value="{{Auth::user()->foto_user}}">
+              <input name="name" type="hidden" class="form-control" value="{{Auth::user()->name}}">
               <div class="form-group">
-                  <input name="nik_ktp" type="hidden" class="form-control" value="{{$item->nik_ktp}}" readonly>
+                  <input name="nik_ktp" type="hidden" class="form-control" value="{{$item->nik_ktp}}">
                 @endforeach
               </div>
-            </div>
+          </div>
             <!-- /.box-body -->
-      
-          
-
           <div class="box-body">
               <div class="form-group">
                 <label  class="col-sm-2 control-label"> Saldo Pokok</label>
@@ -165,18 +164,16 @@
               </div>
           </div>
           <div class="box-body">
-
-          
               <div class="form-group">
                 <label  class="col-sm-2 control-label">Attachment</label>
 
                 <div class="col-sm-10">
                 <input name="paklaring" type="file" id="exampleInputFile" <?php
-                                if($item->status == 'AKTIF')
-                                echo 'disabled';
-                                else 
-                                echo '';
-                                ?>>
+                  if($item->status == 'AKTIF')
+                  echo 'disabled';
+                  else 
+                  echo '';
+                  ?>>
                 <p class="help-block text-red">Note : Khusus untuk pengambilan simpanan pokok dan simpanan wajib harus melampirkan surat keterangan paklaring </p>
 
                 </div>
@@ -243,63 +240,7 @@
           </div>
           </form>
         </div>
-                   
-            
- 
-        </div>
-        <!-- /.box -->
-
-
-
       </div>
-      <!--/.col (left) -->
-      <!-- right column -->
-      <div class="col-md-12">
-        <!-- Horizontal Form -->
-        <div class="box">
-
-          <!-- /.box-header -->
-          <!-- <div class="box-body table-responsive no-padding">
-            
-            <table  id="example1"class="table table-bordered table-striped dataTable">
-              <tbody><tr>
-                <th class="bg-blue-active text-center">KODE</th>
-                <th class="bg-blue-active text-center">Tanggal</th>
-                <th class="bg-blue-active text-center">Jumlah</th>
-                <th class="bg-blue-active text-center">Status</th>
-                <th class="bg-blue-active text-center">Detail</th>
-              </tr>
-              @foreach($pengambilan as $data)
-              <tr>
-                <th>{{$data->id_pengambilan}}</th>
-                <th>{{tanggal_local($data->tgl_pengambilan)}}</th>
-                <th>@currency($data->jumlah_pengambilan)</th>
-                <th class="text-center"><h5 class=" 
-                <?php
-                if($data->status_pengajuan == "WAITING APPROVAL")
-                echo 'bedge bg-yellow';
-                elseif ($data->status_pengajuan == "APPROVED")
-                echo 'bedge bg-green';
-                else 
-                echo 'bedge bg-red';
-                ?>">{{$data->status_pengajuan}}</h5></th>
-                <th class="text-right">P : @currency($data->simpanan_pokok)<br>
-                W : @currency($data->simpanan_wajib)<br>
-                S : @currency($data->simpanan_sukarela)</th>
-              </tr>
-              @endforeach
-            </tbody></table>
-            
-          </div> -->
-
-
-
-          <!-- /.box-body -->
-        </div>
-        <!-- /.box -->
-
-      </div>
-      <!--/.col (right) -->
     </div>
     <!-- /.row -->
 </section>
@@ -310,12 +251,8 @@
       var pok = parseInt($("#simpanan_pokok").val())
       var waj = parseInt($("#simpanan_wajib").val())
       var suk = parseInt($("#simpanan_sukarela").val())
- 
       var jum = pok+waj+suk;
-     
       $("#jumlah").attr("value",jum)
-    
-
     }); 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

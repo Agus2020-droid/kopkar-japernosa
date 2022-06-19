@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsersController;
@@ -10,14 +11,15 @@ use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\SimpananController;
 use App\Http\Controllers\PinjamController;
 use App\Http\Controllers\AngsuranController;
-use App\Http\Controllers\PotonggajiController;
 use App\Http\Controllers\BagihasilController;
 use App\Http\Controllers\PengambilanController;
 use App\Http\Controllers\HostController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\AnggotakopkarController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\ShuController;
+use App\Http\Controllers\MitrakuController;
 use Illuminate\Support\Facades\DB;
 
 
@@ -34,12 +36,12 @@ use Illuminate\Support\Facades\DB;
 
 
 Auth::routes();
-Route::get('/test',function() {
-    $notifications=auth()->user()->unreadNotifications;
-    foreach($notifications as $notification) {
-        dd($notification->data['user']['name']);
-    }
-});
+// Route::get('/test',function() {
+//     $notifications=auth()->user()->unreadNotifications;
+//     foreach($notifications as $notification) {
+//         dd($notification->data['user']['name']);
+//     }
+// });
 Route::get('markAsRead',function() {
     auth()->user()->unreadNotifications->markAsRead();
     return redirect()->back();
@@ -51,9 +53,11 @@ Route::get('/run',function() {
         dd($simpanan);
    
 });
+Route::get('/', function () {
+    return view('v_welcome');
+});
 
-
-Route::get('/', [HomeController::class, 'index'])->name('v_home');
+Route::get('/home', [HomeController::class, 'index']);
 Route::get('/users/ubahPassword/{id}', [UsersController::class, 'ubahPassword']);
 Route::patch('/users/ubahPassword/{id}', [UsersController::class, 'updatePassword']);
 Route::post('/users/editPhoto', [UsersController::class, 'updateProfile']);
@@ -65,9 +69,9 @@ Route::post('/users/editPhoto', [UsersController::class, 'updateProfile']);
 //Route::get('/user/edit/{id_user}', [UserController::class, 'edit']);
 //Route::post('/user/update/{id_user}', [UserController::class, 'update']);
 //Route::get('/user/delete/{id_user}', [UserController::class, 'delete']);
+Route::post('/insertPendaftaran', [PendaftaranController::class, 'simpanPendaftaran']);
 
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/anggotakopkar', [AnggotakopkarController::class, 'index']);
 Route::get('/anggotakopkar/{users}', [AnggotakopkarController::class, 'showProfile']);
 Route::get('/downloadPDF/{users}', [AnggotakopkarController::class, 'pdfKartu']);
@@ -87,13 +91,15 @@ Route::get('/pinjamanSaya/cetakKwitansi/{no_pinjaman}', [PinjamController::class
 Route::get('/simulasi', [PinjamController::class, 'simulasi']);
 
 Route::get('/angsuranSaya/{users}', [AngsuranController::class, 'angsuranSaya']);
-Route::get('/potonggajiSaya/{users}', [PotonggajiController::class, 'potonggajiSaya']);
 Route::get('/shuSaya/{users}', [ShuController::class, 'shuSaya']);
 Route::get('/downloadSlipShu/{users}', [ShuController::class, 'pdfShu']);
 
 Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('v_pengumuman');
-Route::get('/', [PengumumanController::class, 'indexHome'])->name('v_home');
+// Route::get('/', [PengumumanController::class, 'indexHome'])->name('v_home');
 Route::get('/detailPengumuman/{id_pengumuman}', [PengumumanController::class, 'detailPengumuman']);
+
+Route::get('/belanjaku', [MitrakuController::class, 'index']);
+Route::get('/detail-produk', [MitrakuController::class, 'detailProduk']);
 
 //Hak Akses untuk Admin
 Route::group(['middleware' => 'admin'], function () {
@@ -110,7 +116,10 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('/anggota', [AnggotaController::class, 'index'])->name('v_anggota');
     Route::post('/pegawai/insert', [PegawaiController::class, 'store']);
     Route::get('/anggota/{pegawai}', [AnggotaController::class, 'show']);
-    Route::get('/pendaftaran', [AnggotaController::class, 'pendaftaran'])->name('v_pendaftaran');
+
+    Route::get('/pendaftaran', [PendaftaranController::class, 'index']);
+    Route::get('/cetakPendaftaran/{id_pendaftaran}', [PendaftaranController::class, 'CetakPendaftaran'])->name('v_cetakPendaftaran');
+    Route::get('/pendaftaran/delete/{id_pendaftaran}', [PendaftaranController::class, 'delete']);
 
     Route::get('/export', 'UsersController@export');
     Route::post('/UsersImport', 'UsersController@usersimportexcel')->name('UsersImport');
@@ -126,10 +135,11 @@ Route::group(['middleware' => 'admin'], function () {
 
     // Route::get('/member', [MemberController::class, 'index'])->name('v_member');
     
-    Route::get('/simpananAdmin', [SimpananController::class, 'indexAdmin'])->name('v_simpananAdmin');
+    Route::get('/simpananAdmin', [SimpananController::class, 'index'])->name('v_simpananAdmin');
     Route::get('/simpananAdmin/edit/{id_simpanan}', [SimpananController::class, 'editSimpananAdmin']);
     Route::post('/simpananAdmin/update/{id_simpanan}', [SimpananController::class, 'updateAdmin']);
     Route::get('/simpananAdmin/delete/{id_simpanan}', [SimpananController::class, 'deleteAdmin']);
+    Route::get('/simpananAdmin/detailSimpanan/{nik_ktp}',[SimpananController::class, 'detail'])->name('v_detailSimpanan');
     Route::get('/exportsimpanan', [SimpananController::class, 'simpananexport'])->name('exportsimpanan');
     Route::post('/importsimpanan', 'SimpananController@simpananimportexcel')->name('importsimpanan');
 
@@ -166,19 +176,13 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('/downloadPdf/{no_pinjaman}', 'PinjamController@pdfPinjaman');
     
     Route::get('/angsuran', [AngsuranController::class, 'index'])->name('v_angsuran');
-
+    Route::get('/angsuran/detail/{no_pinjaman}', [AngsuranController::class, 'detail']);
     Route::get('/angsuran/delete/{id_angsuran}', [AngsuranController::class, 'delete']);
     Route::get('/exportangsuran', [AngsuranController::class, 'angsuranexport'])->name('exportangsuran');
     Route::post('/importangsuran', 'AngsuranController@angsuranimportexcel')->name('importangsuran');
     Route::get('/angsuran/edit/{id_angsuran}', [AngsuranController::class, 'editAngsuran']);
     Route::post('/angsuran/update/{id_angsuran}', [AngsuranController::class, 'update']);
 
-    Route::get('/potongan', [PotonggajiController::class, 'index'])->name('v_potonggaji');
-    Route::post('/potongan', [PotonggajiController::class, 'search'])->name('v_potonggaji');
-    Route::post('/importpotongan', 'PotonggajiController@potonganimportexcel')->name('importpotongan');
-    Route::get('/potongan/delete/{id_potongan}', [PotonggajiController::class, 'delete']);
-    Route::get('/potongan/edit/{id_potongan}', [PotonggajiController::class, 'editPotongan']);
-    Route::post('/potongan/update/{id_potongan}', [PotonggajiController::class, 'update']);
 
     Route::get('/shu', [ShuController::class, 'index'])->name('v_shu');
     Route::post('/shu', [ShuController::class, 'pushNotif'])->name('pushShu');
@@ -206,6 +210,7 @@ Route::group(['middleware' => 'ketua'], function () {
     Route::get('/pengambilanKetua', [PengambilanController::class, 'indexKetua'])->name('v_pengambilanSimpananKetua');
     Route::get('/pengambilanKetua/edit/{id_pengambilan}', [PengambilanController::class, 'editPengambilanKetua']);
     Route::post('/pengambilanKetua/update/{id_pengambilan}', [PengambilanController::class, 'updatePengambilanKetua']);
+    Route::get('/ketua/dashboard', [HomeController::class, 'dashboard'])->name('v_dashboard');
 });
 
 //Hak Akses untuk HRBP
@@ -217,6 +222,8 @@ Route::group(['middleware' => 'hrbp'], function () {
     Route::post('/pengajuanHrbp', [PinjamController::class, 'searchPengajuanHrbp'])->name('v_pengajuanHrbp');
     Route::get('/pinjamHrbp/edit/{no_pinjaman}', [PinjamController::class, 'editPinjamanHrbp']);
     Route::post('/pinjamHrbp/update/{no_pinjaman}', [PinjamController::class, 'updatePinjamHrbp']);
+    Route::get('/hrbp/dashboard', [HomeController::class, 'dashboard'])->name('v_dashboard');
+
 });
 //Hak Akses untuk Bendahara
 Route::group(['middleware' => 'bendahara'], function () {
@@ -240,6 +247,7 @@ Route::group(['middleware' => 'bendahara'], function () {
     Route::post('/pengambilanBendahara/update/{id_pengambilan}', [PengambilanController::class, 'updatePengambilanBendahara']);
     Route::get('/angsuran/tambah/{no_pinjaman}', [AngsuranController::class, 'tambahAngsuran']);
     Route::post('/angsuran/insert', [AngsuranController::class, 'store'])->name('simpanangsuran');
+    Route::get('/bendahara/dashboard', [HomeController::class, 'dashboard'])->name('v_dashboard');
 
 });
 //Hak Akses untuk Pengurus
@@ -248,6 +256,7 @@ Route::group(['middleware' => 'pengurus'], function () {
     Route::post('/pinjamPengurus', [PinjamController::class, 'searchPengurus'])->name('v_pinjamPengurus');
     Route::get('/pengajuanPengurus', [PinjamController::class, 'indexPengajuanPengurus'])->name('v_pengajuanPengurus');
     Route::post('/pengajuanPengurus', [PinjamController::class, 'searchPengajuanPengurus'])->name('v_pengajuanPengurus');
+    Route::get('/pengurus/dashboard', [HomeController::class, 'dashboard'])->name('v_dashboard');
 });
 
 

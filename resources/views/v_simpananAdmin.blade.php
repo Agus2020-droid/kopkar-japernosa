@@ -42,10 +42,10 @@
                   <th >KODE</th>
                   <th >Nama</th>
                   <th >Tanggal</th>
-                  <th >Simpanan Pokok</th>
-                  <th >Simpanan Wajib</th>
-                  <th >Simpanan Sukarela</th>
-                  <th >Total Simpanan</th>
+                  <th >SimPok</th>
+                  <th >SimWa</th>
+                  <th >SimSuka</th>
+                  <th >Total </th>
                   <th >Action</th>
                 
                   </tr>

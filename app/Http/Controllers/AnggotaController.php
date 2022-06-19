@@ -29,7 +29,7 @@ class AnggotaController extends Controller
     public function index()
     {  
         $pegawai= DB::table('pegawai')
-        ->join('users','pegawai.nik_ktp','=','users.nik_ktp')
+        // ->join('users','pegawai.nik_ktp','=','users.nik_ktp')
         ->orderBy('nama','asc')
         ->get();
         
@@ -221,10 +221,6 @@ class AnggotaController extends Controller
         return view('v_editanggota', $data);
     }
     
-        public function pendaftaran()
-    {
-    
-        return view('v_pendaftaran');
-    }
+
 }
 

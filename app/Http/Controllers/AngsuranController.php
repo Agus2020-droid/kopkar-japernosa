@@ -21,14 +21,27 @@ class AngsuranController extends Controller
 
     public function index()
     {
-        $angsuran = DB::table('angsuran')
+        // $angsuran = DB::table('angsuran')
+        $angsuran = AngsuranModel::select('angsuran.nik_ktp','pegawai.nama','angsuran.no_pinjaman',DB::raw('sum(jumlah_angsuran) as total_angsuran'))
         ->join('pegawai','angsuran.nik_ktp','=','pegawai.nik_ktp')
-        ->orderBy('id_angsuran','desc')->get();
+        ->groupBy('angsuran.no_pinjaman','pegawai.nama','angsuran.nik_ktp')
+        ->orderBy('pegawai.nama','asc')
+        ->get();
         // $data = [
         //     'angsuran' => $this->AngsuranModel->allData(),
         // ];
         // dd($angsuran);
         return view('v_angsuran', compact('angsuran'));
+    }
+
+    public function detail($no_pinjaman) {
+        // $pegawai = DB::table('pegawai')->where('nik_ktp',$nik_ktp)->get();
+        $angsuran = DB::table('angsuran')->where('no_pinjaman',$no_pinjaman)
+        ->leftJoin('angsuran.nik_ktp','=','pegawai.nik_ktp')
+        ->orderBy('tgl_angsuran', 'desc')
+        ->get();
+        // dd ($nopinjaman);
+        return view('v_detailAngsuran', compact('angsuran'));
     }
 
     public function angsuranSaya($nik_ktp)

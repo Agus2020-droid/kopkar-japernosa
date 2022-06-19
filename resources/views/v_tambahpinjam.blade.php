@@ -39,11 +39,13 @@
             
                 
                 
-                <input type="hidden" name="id_user" class="form-control" value="{{Auth::user()->id}}" readonly>
-                <input type="hidden" name="tgl_pengajuan" class="form-control" value="{{date(now())}}" readonly>
-                <input type="hidden" name="notifikasi" class="form-control" value="Pinjaman" readonly>
-                <input name="bunga" type="hidden" class="text-right"  onkeypress="return event.charCode >= 48 && event.charCode <=57" class="form-control" id="bunga" value="0">
-                <div class="callout callout-danger">
+                <input type="hidden" name="id_user" class="form-control" value="{{Auth::user()->id}}">
+                <input type="hidden" name="tgl_pengajuan" class="form-control" value="{{date(now())}}">
+                <input type="hidden" name="notifikasi" class="form-control" value="Pengajuan pinjaman kredit">
+                <input name="foto_user" type="hidden" value="{{auth()->user()->foto_user}}">
+                <input name="name" type="hidden" value="{{auth()->user()->name}}">
+                <input name="bunga" type="hidden" class="text-right" class="form-control" id="bunga" value="0">
+                <div class="callout callout-default text-red bg-gray">
                 <h4><i class="fa fa-warning"></i>  Petunjuk pengisian form :</h4>
                 <span>(*) kolom wajib diisi, atau jika tidak diisi dengan tanda Strip (-)</span> 
               </div>
@@ -81,7 +83,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="inputName" class="col-sm-2 control-label">Jenis Pinjaman</label>
+                  <label for="inputName" class="col-sm-2 control-label">Jenis Pinjaman <span class="text-red">*</span></label>
                   <div class="col-sm-10">
                     <select name="jenis_pinjaman" type="text" class="form-control select2 select2-accessible" style="width: 100%;" data-select2-id="2" tabindex="-1" aria-hidden="true" id="jenis_pinjaman" placeholder="Pilih Jenis Pinjaman">
                       <option value="Pengembangan" >Pengembangan (Profit)</option>
@@ -91,7 +93,7 @@
                 </div>
                 
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">Nama Barang / Jasa  <span class="text-red">(*)</span> </label>
+                  <label class="col-sm-2 control-label">Nama Barang / Jasa  <span class="text-red">*</span> </label>
                   <div class="col-sm-10">
                     <input name="nama_barang"type="text"class="form-control @error('nama_barang') is-invalid @enderror"  placeholder="Nama Barang atau Jasa" id="nama_barang"value="{{old('nama_barang')}}">
                     @error('nama_barang')
@@ -101,7 +103,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label type="hidden" class="col-sm-2 control-label">Merk / Brand <span class="text-red">(*)</span> </label>
+                  <label type="hidden" class="col-sm-2 control-label">Merk / Brand <span class="text-red">*</span> </label>
                   <div class="col-sm-10">
                     <input name="merk" type="text" class="form-control" id="merk" placeholder="Merk produk" value="{{old('merk')}}">
                     @error('merk')
@@ -111,7 +113,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">Spesifikasi <span class="text-red">(*)</span> </label>
+                  <label  class="col-sm-2 control-label">Spesifikasi <span class="text-red">*</span> </label>
                   <div class="col-sm-10">
                     <input name="spesifikasi" type="text"class="form-control" id="spesifikasi" placeholder="Masukan spesifikasi produk" value="{{old('spesifikasi')}}"></input>
                     @error('spesifikasi')
@@ -121,7 +123,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">Jumlah Unit <span class="text-red">(*)</span> </label>
+                  <label  class="col-sm-2 control-label">Jumlah Unit <span class="text-red">*</span> </label>
                   <div class="col-sm-10">
                     <input name="unit"type="text" class="form-control" id="unit" placeholder="Unit" value="{{old('unit')}}">
                     @error('unit')
@@ -131,7 +133,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="tenor" class="col-sm-2 control-label">Tenor</label>
+                  <label for="tenor" class="col-sm-2 control-label">Tenor <span class="text-red">*</span></label>
 
                   <div class="col-sm-10">
                   <select name="tenor" class="form-control select2 select2-accessible" style="width: 100%;" data-select2-id="3" tabindex="-1" aria-hidden="true" id="tenor">
@@ -152,7 +154,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="plafon" class="col-sm-2 control-label">Plafon Kredit <span class="text-red">(*)</span> </label>
+                  <label for="plafon" class="col-sm-2 control-label">Plafon Kredit <span class="text-red">*</span> </label>
 
 
                   <div class="col-sm-10">

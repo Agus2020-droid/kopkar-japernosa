@@ -109,7 +109,7 @@
               <tr>
                 <th>No.</th>
                 <th>Tgl</th>
-                <th>PHOTO</th>
+                <!-- <th>PHOTO</th> -->
                 <th>INFORMASI PEMOHON</th>
                 <th>Plafon</th>
                 <th>ADMIN</th>
@@ -125,46 +125,47 @@
                 <tr>
                 <td >{{ $no++}}</td>
                 <td >{{Carbon\Carbon::parse($data->tgl_pengajuan)->format("d-m-y")}}</td>
-                <td ><a href="{{ url('anggota/'.$data->nik_ktp) }}"> <img src="{{ asset('public/public/foto_pegawai/'.$data->foto_pegawai) }}" alt="user-avatar" class="img-responsive img-circle" style="height: 50px;width: 50px;"></a></td>
+                <!-- <td ><a href="{{ url('anggota/'.$data->nik_ktp) }}"> <img src="{{ asset('public/public/foto_pegawai/'.$data->foto_pegawai) }}" alt="user-avatar" class="img-responsive img-circle" style="height: 50px;width: 50px;"></a></td> -->
                 <td >{{$data->nama}}<br><small class="text-red">Nik.{{$data->nik_ktp}}<br><a href="https://api.whatsapp.com/send?phone=62{{$data->telp}}" target="_blank">{{$data->telp}}</a></small></td>
                 <td >{{format_uang($data->plafon)}}<br><small class="text-blue">{{$data->jenis_pinjaman}}</small></td>
-  
-                <td >
-                  
+                <td style="font-size: 22px">
+                  <center>
                   <?php
                     if($data->status_pengajuan == "WAITING VERIFIED")
-                    echo '<span class="label label-warning"><i class="fa fa-clock-o"></i></span>';
+                    echo '<i class="fa fa-warning text-orange"></i>';
                     elseif ($data->status_pengajuan == "PENDING")
-                    echo '<span class="label label-default"><i class="fa fa-history"></i></span>';
+                    echo '<i class="fa fa-stop-circle text-yellow"></i>';
                     elseif ($data->status_pengajuan == "VERIFIED")
-                    echo '<span class="label label-success"><i class="fa fa-check-circle bg-green"></i></span>';
+                    echo '<i class="fa fa-check-circle text-green"></i>';
                     else 
-                    echo '<span class="label label-danger"><i class="fa fa-ban"></i> </span>';
-                    ?>
+                    echo '<i class="fa fa-ban text-red"></i>';
+                    ?></center>
                 </td>
-                <td>
+                <td style="font-size: 22px">
+                <center>
                   <?php
                     if($data->ttd_hrbp == "WAITING APPROVAL")
-                    echo '<span class="label label-warning"><i class="fa fa-clock-o"></i></span>';
+                    echo '<i class="fa fa-warning text-orange"></i>';
                     elseif ($data->ttd_hrbp == "APPROVED")
-                    echo '<span class="label label-success"><i class="fa fa-check-circle bg-green"></i></span>';
+                    echo '<i class="fa fa-check-circle text-green"></i>';
                     elseif ($data->ttd_hrbp == "PENDING")
-                    echo '<span class="label label-default"><i class="fa fa-history"></i></span>';
+                    echo '<i class="fa fa-stop-circle text-yellow"></i>';
                     else 
-                    echo '<span class="label label-danger"><i class="fa fa-ban"></i></span>';
-                    ?>
+                    echo '<span class="badge bg-red"><i class="fa fa-ban"></i></span>';
+                    ?></center>
                 </td>
-                <td>
-                <?php
+                <td style="font-size: 22px">
+                <center>
+                  <?php
                     if($data->ttd_ketua == "WAITING APPROVAL")
-                    echo '<span class="label label-warning"><i class="fa fa-clock-o"></i></span>';
+                    echo '<i class="fa fa-warning text-orange"></i>';
                     elseif ($data->ttd_ketua == "APPROVED")
-                    echo '<span class="label label-success"><i class="fa fa-check-circle bg-green"></i></span>';
+                    echo '<i class="fa fa-check-circle text-green"></i>';
                     elseif ($data->ttd_ketua == "PENDING")
-                    echo '<span class="label label-default"><i class="fa fa-history"></i> HOLD</span>';
+                    echo '<i class="fa fa-stop-circle text-yellow"></i>';
                     else 
-                    echo '<span class="label label-danger"><i class="fa fa-ban"></i></span>';
-                    ?>
+                    echo '<span class="badge bg-red"><i class="fa fa-ban"></i></span>';
+                    ?></center>
                 </td>
                 
                 <td><h5
@@ -182,7 +183,7 @@
                 </td>
                 
                 <td >
-                <a href="/pinjam/edit/{{ $data->no_pinjaman}}" class="btn btn-default btn-sm btn-block
+                <a href="/pinjam/edit/{{ $data->no_pinjaman}}" class="btn btn-default btn-sm
                 
                 <?php 
                 if((auth()->user()->level) == 2)
@@ -190,7 +191,7 @@
                 else
                 echo 'hidden';
                 ?>" aria-label="Validasi">Edit</a>
-                <a href="/pinjamBendahara/edit/{{ $data->no_pinjaman}}" class="btn btn-sm btn-default btn-block
+                <a href="/pinjamBendahara/edit/{{ $data->no_pinjaman}}" class="btn btn-sm btn-default
                 <?php
                 if($data->ttd_ketua && $data->ttd_hrbp == "WAITING APPROVAL")
                 echo 'disabled';
@@ -210,7 +211,7 @@
                
                  <!-- hint--top" aria-label="Pembayaran"><i class="fa fa-money"></i></a> -->
                 
-                <a  href="/pinjamanSaya/detail/{{$data->no_pinjaman}}" class="btn btn-default btn-sm btn-block 
+                <a  href="/pinjamanSaya/detail/{{$data->no_pinjaman}}" class="btn btn-default btn-sm 
                 <?php
                 if($data->ttd_ketua && $data->ttd_hrbp == "WAITING APPROVAL")
                 echo 'disabled';
@@ -226,7 +227,7 @@
                 echo "/pinjam/cetak/{$data->no_pinjaman}";
                 else 
                 echo "/pinjam/cetakNonProfit/{$data->no_pinjaman}";
-                ?>" target="_blank" class="btn btn-default btn-sm btn-block
+                ?>" target="_blank" class="btn btn-default btn-sm 
                  <?php
                 if($data->ttd_ketua == "APPROVED"  && $data->ttd_hrbp == "APPROVED")
                 echo '';
@@ -239,7 +240,7 @@
                 echo 'hidden';
                 ?>" aria-label="Print Pengajuan"  type="button" >Print</a>
                  
-              <button type="button" class="btn btn-danger btn-sm btn-block 
+              <button type="button" class="btn btn-danger btn-sm 
               <?php 
                 if((auth()->user()->level) == 2)
                 echo '';

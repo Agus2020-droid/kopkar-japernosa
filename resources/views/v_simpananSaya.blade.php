@@ -3,7 +3,7 @@
 
 @section('content')
 <section class="content-header">
-      <h1>SIMPANAN DANA
+      <h1>SIMPANAN TABUNGAN KOPERASI
       <small>Tabel</small></h1>
       <ol class="breadcrumb">
         <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
@@ -18,21 +18,33 @@
           <!-- /.box -->
 
           <div class="box" style="box-shadow: 0 5px 10px rgba(0,0,0,.2);">
-            <div class="box-header bg-blue-active color-palette">
-              <div class="row">
-                  <div class="col-sm-3 ">
-                    <ul class="list-group ">
-                      <li class="list-group">
-                        @foreach ($pegawai as $item)
-                        <b>NAMA</b> <p class="pull-right"> {{$item->nama}}</p>
-                      </li>
-                      <li class="list-group">
-                        <b>NIK</b> <p class="pull-right">{{$item->nik_karyawan}}</p>
-                        @endforeach
-                      </li>
-                    </ul>
-                  </div>
-              </div>
+            <div class="box-header bg-gray-active">
+              <table>
+                  <tbody>
+                  @foreach ($pegawai as $item)
+                    <tr style="font-size:16px;height: 20px">
+                      <td width="40%">NAMA</td>
+                      <td width="20%">:</td>
+                      <td width="40%">{{$item->nama}}</td>
+                    </tr>
+                    <tr style="font-size:16px;height: 40px">
+                      <td>NIK KARYAWAN</td>
+                      <td>:</td>
+                      <td>{{$item->nik_karyawan}}</td>
+                    </tr>
+                    @endforeach
+                    <tr class="bg-gray">
+                      <td colspan="3" class="text-center" style="font-size:20px">
+                      SALDO SIMPANAN
+                      </td>
+                    </tr>
+                    <tr class="bg-gray">
+                      <td colspan="3" class="text-center" style="font-size:30px">
+                      {{"Rp. ".format_uang($jml_simpanan)}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>  
             </div>
         
             <!-- /.box-header -->
@@ -44,7 +56,7 @@
                     <thead>
                     <tr role="row">
                       <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">No.</th>
-                      <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Tgl Simpanan</th>
+                      <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Tgl Transaksi</th>
                       <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Pokok</th>
                       <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">Wajib</th>
                       <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">Sukarela</th>
@@ -63,23 +75,9 @@
                       </tr>
                       @endforeach
                     </tbody>
-
                   </table>
-
-                          <div class="pull-right">
-              <h5>Summary <span class="badge badge-secondary"> {{"Rp. ".format_uang($jml_simpanan)}}</span></h5>
-                          </div>
-                    
-                  
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-5">
-                 
-                </div>
-              </div>
-
-            
+              </div>            
             <!-- /.box-body -->
           </div>
           <!-- /.box -->

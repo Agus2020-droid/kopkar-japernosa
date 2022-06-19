@@ -78,7 +78,9 @@
             </div>
             <input name="tgl_disetujui_bendahara" type="hidden" class="form-control" value="{{date(now())}}">
             <input name="disetujui_bendahara" type="hidden" class="form-control" value="{{Auth::user()->name}}">
-            <input name="notifikasi" type="hidden" class="form-control" value="Re : Permohonan penarikan dana simpanan" readonly>
+            <input name="notifikasi" type="hidden" class="form-control" value="Re:Tarik dana simpanan a.n {{$data->nama}}">
+            <input name="foto_user" type="hidden" value="{{auth()->user()->foto_user}}">
+            <input name="name" type="hidden" value="{{auth()->user()->name}}">
                 @endforeach
                 <div class="form-group">
                     <div class="col-sm-offset-5 col-sm-5">

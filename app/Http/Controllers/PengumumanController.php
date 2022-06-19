@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Notifications\RepliedToThread;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\DB;
+use App\Models\VisitModel;
+
 
 class PengumumanController extends Controller
 {
@@ -25,16 +27,10 @@ class PengumumanController extends Controller
         return view('v_pengumuman', compact('data'));
     }
 
-    public function indexHome()
-    {
-        $data = PengumumanModel::orderBy('tgl_pengumuman','desc')->paginate(5);
-       
-        // dd ($data);
-        return view('v_home', compact('data'));
-    }
 
     public function detailPengumuman($id_pengumuman)
     {
+        PengumumanModel::find($id_pengumuman)->increment('views');
         $data = PengumumanModel::where('id_pengumuman', $id_pengumuman)->get();
        
         // dd ($data);
@@ -44,15 +40,20 @@ class PengumumanController extends Controller
     public function store(Request $request)
      {
         $users = User::all();
+        $notif = [
+            'notifikasi' => Request()->notifikasi,
+            'foto_user' => Request()->foto_user,
+            'name' => Request()->name,
+        ];
          Request()->validate([
             'judul' => 'required|max:50',
             'isi' => 'required',
-            'lampiran' => 'mimes:pdf,jpg,jpeg,bmp,png|max:1024',
+            'lampiran' => 'mimes:jpg,jpeg,bmp,png|max:1024',
          ],[
             'judul.required'=>'Kolom judul wajib diisi.',
             'isi.required'=>'Kolom isi wajib diisi.',
-            'lampiran.mimes'=>'file berekstensi pdf,jpg,jpeg,bmp,png.',
-            'lampiran.max'=>'Size file max.1024 mb.',
+            'lampiran.mimes'=>'Type file jpg,jpeg,bmp,png.',
+            'lampiran.max'=>'Ukuran file max.1024 mb.',
          ]);
         
         $file = Request()->lampiran;
@@ -64,14 +65,12 @@ class PengumumanController extends Controller
             'judul' => Request()->judul,
             'isi' => Request()->isi,
             'tgl_pengumuman' => Request()->tgl_pengumuman,
-            'notifikasi' => Request()->notifikasi,
             'lampiran' => $filename,
+            'notifikasi' => Request()->notifikasi,
             'author' => Request()->author,
-            
         ];
         $this->PengumumanModel->tambahPengumuman($data);
-        Notification::send($users, new RepliedToThread($data));
-
+        Notification::send($users, new RepliedToThread($notif));
         // dd($users,$data);
         return back()->with('success', 'Pengumuman berhasil di publish !!!');
     }

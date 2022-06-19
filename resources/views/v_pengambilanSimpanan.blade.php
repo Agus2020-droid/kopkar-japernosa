@@ -88,57 +88,36 @@
                   <td class="text-right">{{format_uang($data->simpanan_wajib)}}</td>
                   <td class="text-right">{{format_uang($data->simpanan_sukarela)}}</td>
                   <td class="text-right">{{format_uang($data->jumlah_pengambilan)}}</td>
-                  <td class="text-center">
-                  <h5 class="label 
-                <?php
-                  if($data->ttd_ketua == "Waiting Approval")
-                  echo 'label-warning ';
-                  elseif ($data->ttd_ketua == "Approved")
-                  echo 'label-success ';
-                  elseif ($data->ttd_ketua == "Pending")
-                  echo 'label-warning ';
-                  else 
-                  echo 'label-danger ';
-                  ?>"><span class="
+                <td style="font-size: 22px">
+                <center>
                   <?php
-                  if($data->ttd_ketua == "Waiting Approval")
-                  echo 'glyphicon glyphicon-time';
-                  elseif ($data->ttd_ketua == "Approved")
-                  echo 'glyphicon glyphicon-ok';
-                  elseif ($data->ttd_ketua == "Pending")
-                  echo 'glyphicon glyphicon-time';
-                  else 
-                  echo 'glyphicon glyphicon-remove';
-                  ?>"></span>
-                </h5></td>
-
-                  <td class="text-center">
-                  <h5 class="label 
-                <?php
-                  if($data->ttd_bendahara == "Waiting Approval")
-                  echo 'label-warning ';
-                  elseif ($data->ttd_bendahara == "Approved")
-                  echo 'label-success ';
-                  elseif ($data->ttd_bendahara == "Pending")
-                  echo 'label-warning ';
-                  else 
-                  echo 'label-danger ';
-                  ?>"><span class="
+                    if($data->ttd_ketua == "Waiting Approval")
+                    echo '<i class="fa fa-warning text-orange"></i>';
+                    elseif ($data->ttd_ketua == "Approved")
+                    echo '<i class="fa fa-check-circle text-green"></i>';
+                    elseif ($data->ttd_ketua == "Pending")
+                    echo '<i class="fa fa-stop-circle text-yellow"></i>';
+                    else 
+                    echo '<span class="badge bg-red"><i class="fa fa-ban"></i></span>';
+                    ?></center>
+                </td>
+                <td style="font-size: 22px">
+                <center>
                   <?php
-                  if($data->ttd_bendahara == "Waiting Approval")
-                  echo 'glyphicon glyphicon-time';
-                  elseif ($data->ttd_bendahara == "Approved")
-                  echo 'glyphicon glyphicon-ok';
-                  elseif ($data->ttd_bendahara == "Pending")
-                  echo 'glyphicon glyphicon-time';
-                  else 
-                  echo 'glyphicon glyphicon-remove';
-                  ?>"></span>
-                </h5></td>
+                    if($data->ttd_bendahara == "Waiting Approval")
+                    echo '<i class="fa fa-warning text-orange"></i>';
+                    elseif ($data->ttd_bendahara == "Approved")
+                    echo '<i class="fa fa-check-circle text-green"></i>';
+                    elseif ($data->ttd_bendahara == "Pending")
+                    echo '<i class="fa fa-stop-circle text-yellow"></i>';
+                    else 
+                    echo '<span class="badge bg-red"><i class="fa fa-ban"></i></span>';
+                    ?></center>
+                </td>
                   
                   <td class="text-center">
                   <!-- <img src="{{ asset('public/public/foto_paklaring/'.$data->paklaring) }}" class="" width="80px" height="80px"><br> -->
-                  <a target="_blank" class="btn btn-sm btn-default"href="{{ asset('public/public/foto_paklaring/'.$data->paklaring)}}">View</a></td>
+                  <a target="_blank" href="{{ asset('public/public/foto_paklaring/'.$data->paklaring)}}"><i class="fa fa-paperclip"></i> Attachement</a></td>
 
                   <td class="text-center">
                   <button  class="btn btn-info btn-sm hint--top" aria-label="Lihat" data-toggle="modal" data-target="#view{{$data->id_pengambilan}}"><i class="fa fa-eye"></i></button>

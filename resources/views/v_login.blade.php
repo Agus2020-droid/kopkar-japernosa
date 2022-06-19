@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <LINK REL="SHORTCUT ICON" href="http://www.kopkar.japernosa.com/logo.ico" />
-  <title>KOPKAR JPNS | LOGIN</title>
+  <link rel="shortcut icon" type="image/ico" href="http://www.kopkar.japernosa.com/favicon.ico"  />
+  <title>KOPKAR JAPERNOSA | Login</title>
   
   <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
@@ -28,25 +28,22 @@
   <main class="d-flex align-items-center min-vh-100 py-3 py-md-0 ">
     <div class="container" >
      <marquee><strong><h4 class="text-primary">BERKARYA BERSAMA UNTUK MEMAJUKAN KESEJAHTERAAN ANGGOTA</h4></strong></marquee>
-      <div class="box-header card login-card " style="border-width: 3px; padding: 1.5em .5em .5em;border-radius: 2em;
-    " >
+      <div class="box-header card login-card " style="border-width: 3px; padding: 1.5em .5em .5em;border-radius: 2em" >
       <div class="col-sm-5">
         <div class="box-header no-border">
          
               <center><img src="{{asset('logo.png')}}" alt="logo" class="bg-default img-responsive img-circle" style="height: 255px; width:255px;">
               <h3 class="text-primary"><b>KOPERASI KARYAWAN </h3>
               <h5 class="text-orange"><b>JAYA PERSADA EKONOMI SEJAHTERA</h5>
-              <h5>PT. SUMBER GRAHA SEJAHTERA</h5>
-              <h5>CABANG PURBALINGGA</h5></center>
+              <p style="font-size: 12px">PT. SUMBER GRAHA SEJAHTERA - CABANG PURBALINGGA</p></center>
           
         </div>
       </div>
       <div class="col-sm-7">
-        <div class="box-header card login-card" style="padding: 1.5em .5em .5em;border-radius: 2em;
-    box-shadow: 0 5px 10px rgba(0,0,0,.2);">
+        <div >
           <div class="card-body">
           <h2 class="login-card-title">Login</h2>
-          <h6 class="login-card-description">Sign in to your account to continue.</h6>
+          <h6 class="login-card-description">Masukan user dan password Anda untuk melanjutkan.</h6>
           <form method="POST" action="{{ route('login') }}">
           {{csrf_field()}}
             <div class="form-group">
@@ -67,7 +64,7 @@
               </span>
               @enderror            
             </div>
-          <div class="row">
+            <div class="row">
             <div class="col-6">
                 {!! NoCaptcha::display() !!}
                 {!! NoCaptcha::renderJs() !!}
@@ -92,6 +89,8 @@
           </form>
           <!--<h6 class="login-card-footer-text">Don't have an account? <a href="https://api.whatsapp.com/send?phone=6285876344438" target="_blank" class="text-reset-blue">Call Center Admin</a></h6>-->
           <h6 class="login-card-footer-text">Belum punya akun ? <a href="https://forms.gle/fsWPWzyyGu72miMK7" target="_blank" class="text-reset-blue">Register Akun</a></h6>
+          <i class="fa fa-chevron-left"></i> <a href="/welcome" class="text-reset-blue">Kembali</a>
+
         </div>
         </div>
       </div>

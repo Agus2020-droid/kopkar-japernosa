@@ -19,6 +19,6 @@ class Bendahara
         if (auth()->user()->level == 6) {
             return $next($request);
         }
-        return redirect('/');
+        return redirect('/home');
     }
 }

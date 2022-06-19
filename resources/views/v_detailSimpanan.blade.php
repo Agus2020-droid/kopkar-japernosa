@@ -66,7 +66,11 @@
                   <td >{{format_uang($sim->simpanan_sukarela)}}</td>
                   <td >{{format_uang($sim->jumlah_simpanan)}}</td>
                   <td >
+                  @if(auth()->user()->level == 6)
                     <a href="/simpanan/edit/{{$sim->id_simpanan}}" type="button" class="btn btn-primary btn-sm">Edit</a>
+                    @elseif(auth()->user()->level == 2)
+                    <a href="/simpananAdmin/edit/{{$sim->id_simpanan}}" type="button" class="btn btn-primary btn-sm">Edit</a>
+                   @endif 
                     <button type="button" class="btn btn-danger btn-sm hint--top" aria-label="Hapus" data-toggle="modal" data-target="#delete{{$sim->id_simpanan}}"><i class="fa fa-trash-o"></i></button>
                   </td>
                   </tr>
@@ -93,7 +97,11 @@
 
                       <div class="modal-footer">
                         <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Batal</button>
+                      @if(auth()->user()->level == 6)
                         <a href="/simpanan/delete/{{$sim->id_simpanan}}" class="btn btn-outline">Hapus</a>
+                      @elseif(auth()->user()->level == 2)
+                        <a href="/simpananAdmin/delete/{{$sim->id_simpanan}}" class="btn btn-outline">Delete</a>
+                      @endif
                       </div>
                     </div>
                   </div>

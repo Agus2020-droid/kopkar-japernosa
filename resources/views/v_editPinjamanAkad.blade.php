@@ -151,8 +151,7 @@
               </tbody>
       </table>
 
-        <input name="tgl_disetujui_ketua" type="hidden" class="form-control" value="{{date(now())}}"readonly>
-        <input name="disetujui_ketua" type="hidden" class="form-control" value="{{Auth::user()->name}}">
+        
         <!-- /.col -->
           
             <div class="box-header with-border bg-gray">
@@ -294,31 +293,7 @@
                               <label>VERIFIKASI</label>
                             </div>
                             <div class="col-md-10">
-                            <select name="status_pengajuan" type="text" class="form-control select2 select2-accessible" style="width: 100%;" data-select2-id="3" tabindex="-1" aria-hidden="true" id="status" value="{{$data->status_pengajuan}}" readonly>
-                                  <option value="{{$data->status_pengajuan}}" readonly>{{$data->status_pengajuan}} (current)</option>
-                                  <!-- <option class="bg-green"value="VERIFIED">VERIFIED</option>
-                                  <option class="bg-orange"value="WAITING VERIFIED">WAITING VERIFIED</option>
-                                  <option class="bg-yellow"value="PENDING">PENDING</option>
-                                  <option class="bg-red"value="CANCEL">CANCEL</option> -->
-                              </select> 
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-2">
-                              <label>CATATAN</label>
-                            </div>
-                            <div class="col-md-10">
-                            <select name="note" type="text" class="form-control select2 select2-accessible" style="width: 100%;" data-select2-id="3" tabindex="-1" aria-hidden="true" readonly>
-                                  <option value="{{$data->note}}" readonly>{{$data->note}} (current)</option>
-                                  <!-- <option value="LANJUT APPROVAL HRD & KETUA">LANJUT APPROVAL HRD & KETUA</option>
-                                  <option value="LAIN-LAIN">LAIN-LAIN</option> -->
-                              </select> 
-                                
-                                <!-- <textarea name="note" id="myTextarea" class="textarea" value="{{Auth::user()->name}}{!!$data->note!!}"style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid rgb(221, 221, 221); padding: 10px;display: ;" placeholder="Place some text here"></textarea> -->
-                                @error('note')
-                                <span class="label label-danger">{{$message}}</span>
-                                @enderror
-                                <!-- <input type="hidden" name="_wysihtml5_mode" value="1"> -->
+                            <input name="status_pengajuan" type="text" class="form-control" value="{{$data->status_pengajuan}}" readonly>                              
                             </div>
                           </div>
                           <div class="row">
@@ -335,7 +310,7 @@
                                 @error('posisi')
                                 <span class="label label-danger">{{$message}}</span>
                                 @enderror
-                                <!-- <input type="hidden" name="_wysihtml5_mode" value="1"> -->
+                                
                             </div>
                           </div>
                         </div>
@@ -345,7 +320,9 @@
             </table>
             <input name="tgl_verifikasi" type="hidden" class="form-control" value="{{Carbon\Carbon::parse(date(now()))->format("d-M-y H:i:s")}}" readonly>
             <input name="verifikator" type="hidden" class="form-control" value="{{Auth::user()->name}}" readonly>
-            <input name="notifikasi" type="hidden" class="form-control" value="Verifikasi pinjaman {{$data->nama}}" readonly>
+            <input name="notifikasi" type="hidden" class="form-control" value="Akad kredit No. P-{{$data->no_pinjaman}} " >
+            <input name="foto_user" type="hidden" value="{{auth()->user()->foto_user}}">
+            <input name="name" type="hidden" value="{{auth()->user()->name}}">
             @endforeach
             <div class="col-md-12">
               <br>

@@ -149,7 +149,7 @@
               
               </tbody>
         </table>
-        <input name="tgl_disetujui_hrbp" type="hidden" class="form-control" value="{{date(now())}}"readonly>
+        <input name="tgl_disetujui_hrbp" type="hidden" class="form-control" value="{{date(now())}}">
         <input name="disetujui_hrbp" type="hidden" class="form-control" value="{{Auth::user()->nik_ktp}}">
         <!-- /.col -->
             <div class="box-header bg-blue color-palette">
@@ -319,11 +319,10 @@
                 </div>
                 
                 <div class="col-md-10">
-                <textarea name="note" id="myTextarea" class="textarea" value="{{Auth::user()->name}}{!!$data->note!!}"style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid rgb(221, 221, 221); padding: 10px;display: ;" placeholder="Place some text here"></textarea>
+                <textarea name="note" id="summernote" class="textarea" value="{{Auth::user()->name}}{!!$data->note!!}"style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid rgb(221, 221, 221); padding: 10px;display: ;" placeholder="Silahkan ketik pesan ....."></textarea>
                 @error('note')
                     <span class="label label-danger">{{$message}}</span>
                     @enderror
-                <input type="hidden" name="_wysihtml5_mode" value="1">
                 </div>
             </div>
               </td>
@@ -333,7 +332,9 @@
         </table>
 
             <div class="row">
-                <input name="notifikasi" type="hidden" class="form-control" value="Re: Pinjaman {{$data->nama}}" readonly>
+                <input name="notifikasi" type="hidden" value="Re: Pinjaman {{$data->nama}}">
+                <input name="foto_user" type="hidden" value="{{auth()->user()->foto_user}}">
+                <input name="name" type="hidden" value="{{auth()->user()->name}}">
                 @endforeach
                 <div class="col-md-12">
                   <a href="/pengajuanHrbp"type="submit" class="btn btn-default pull-left">CANCEL</a>

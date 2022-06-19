@@ -5,6 +5,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
+use ConsoleTVs\Charts\Registrar as Charts;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -27,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
      * 
      * @return void
      */
-    public function boot()
+    public function boot(Charts $charts)
     {
         Paginator::useBootstrap();
         Blade::directive('currency', function ( $expression ) {
@@ -36,5 +37,10 @@ class AppServiceProvider extends ServiceProvider
         config(['app.locale' => 'id']);
         Carbon::setlocale('id');
         date_default_timezone_set('Asia/Jakarta');
+
+        $charts->register([
+            \App\Charts\VisitorChart::class,
+            \App\Charts\UserChart::class
+        ]);
     }
 }

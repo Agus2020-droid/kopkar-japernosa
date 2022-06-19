@@ -178,6 +178,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
+        ConsoleTVs\Charts\ChartsServiceProvider::class,
     ],
 
     /*

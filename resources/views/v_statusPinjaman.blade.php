@@ -65,33 +65,30 @@
             </div>
             <!-- /.box-header -->
             <div class="box box-header">
-          <div class="table-responsive no-padding">
-            @if (session('pesan'))
+              @if (session('pesan'))
                 <div class="alert alert-success alert-dismissible">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                   <h4><i class="icon fa fa-check"></i> Success!</h4>
                   {{session('pesan')}}.
                 </div>
-                @endif
-                <table id="example1"class="table table-striped table-bordered" width="100%" cellspacing="0">
+              @endif
+            <table id="example1"class="table table-striped table-bordered" width="100%" cellspacing="0">
               <thead>
-              <tr>
-                <th class="bg-blue">No.</th>
-                <th class="bg-blue">KODE</th>
-                <th class="bg-blue">Tgl</th>
-                <th class="bg-blue">Nama</th>
-                <th class="bg-blue">Plafon</th>
-                <th class="bg-blue">Nama Barang/Jasa</th>
-                <th class="bg-blue">Angsuran Pokok</th>
-                <th class="bg-blue">Tenor</th>
-                <th class="bg-blue">Total Kredit</th>
-                <th class="bg-blue">Sudah Diangsur</th>
-                <th class="bg-blue">Sisa Angsuran</th>
-
-                <th class="bg-blue">Status</th>
-                <th class="bg-blue">LUNAS/BELUM</th>
-                
-                </tr>
+                <tr class="bg-blue">
+                  <th >No.</th>
+                  <th >KODE</th>
+                  <th >Tgl</th>
+                  <th >Nama</th>
+                  <th >Plafon</th>
+                  <th >Nama Barang/Jasa</th>
+                  <!-- <th >Angsuran Pokok</th>
+                  <th >Tenor</th>
+                  <th >Total Kredit</th>
+                  <th >Sudah Diangsur</th>
+                  <th >Sisa Angsuran</th> -->
+                  <th >Status</th>
+                  <th >LUNAS/BELUM</th>
+                  </tr>
                 </thead>
                 <tbody>
                 <?php $no=1; ?>
@@ -100,28 +97,24 @@
                 <td >{{ $no++}}</td>
                 <td >P-{{$data->no_pinjaman}}</td>
                 <td >{{Carbon\Carbon::parse($data->tgl_pengajuan)->format("d-m-y")}}</td>
-                
                 <td >{{$data->nama}}<br><small class="text-red">Nik.{{$data->nik_ktp}}</small></td>
                 <td >{{format_uang($data->plafon)}}<br><small class="text-blue">{{$data->jenis_pinjaman}}</small></td>
                 <td >{{$data->nama_barang}}</td>
-                <td>{{format_uang($data->angsuran)}}</td>
+                <!-- <td>{{format_uang($data->angsuran)}}</td>
                 <td>{{format_uang($data->tenor)}}</td>
                 <td>{{format_uang($data->total_kredit)}}</td>
                 <td>{{format_uang($data->total_angsuran)}}</td>
                 <td 
-                
-                <?php
-                    if(($data->total_angsuran - $data->total_kredit) == 0 )
-                    echo 'class="text-green"';
-                    elseif (($data->total_angsuran - $data->total_kredit) < 0 )
-                    echo 'class="text-red"';
-                    else 
-                    echo 'class="text-yellow"';
-                    ?>
-                >{{format_uang($data->total_angsuran - $data->total_kredit)}}</td>
-
- 
-                <td><h5
+                  <?php
+                      if(($data->total_angsuran - $data->total_kredit) == 0 )
+                      echo 'class="text-green"';
+                      elseif (($data->total_angsuran - $data->total_kredit) < 0 )
+                      echo 'class="text-red"';
+                      else 
+                      echo 'class="text-yellow"';
+                      ?>>{{format_uang($data->total_angsuran - $data->total_kredit)}}
+                </td> -->
+                <td class="text-center"><h5
                 class="label 
                   <?php
                     if($data->posisi == "Belum BS")
@@ -138,9 +131,8 @@
                     echo 'label-danger';
                     ?>">{{$data->posisi}}</h5>
                 </td>
-                <td>
-                <h5
-                <?php
+                <td class="text-center"><h5
+                  <?php
                     if(($data->total_angsuran - $data->total_kredit) == 0 )
                     echo 'class="label label-success">LUNAS';
                     elseif (($data->total_angsuran - $data->total_kredit) < 0 )
@@ -149,10 +141,8 @@
                     echo 'class="label label-warning">LEBIH ANGSURAN';
                     ?></h5>
                 </td>
-                
-                  
                 </tr>
-              @endforeach
+                @endforeach
                 </tbody>
               </table>
 

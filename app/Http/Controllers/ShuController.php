@@ -48,10 +48,12 @@ class ShuController extends Controller
 
     public function pushNotif(Request $request, User $users) {
         $users = User::all();
-        $request = [
+        $notif = [
             'notifikasi' => Request()->notifikasi,
+            'foto_user' => Request()->foto_user,
+            'name' => Request()->name,
         ];
-        Notification::send($users, new RepliedToThread($request));
+        Notification::send($users, new RepliedToThread($notif));
         return back()->with('info','Push notification successfully!');
     }
     

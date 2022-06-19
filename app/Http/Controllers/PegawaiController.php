@@ -80,47 +80,6 @@ class PegawaiController extends Controller
         return redirect()->route('v_anggota')->with('success', 'Data Berhasil Dihapus !!!');
     }
 
-    public function store1(CreatePegawaiRequest $request)
-    {
-        $id = Pegawai::get('id');
-            // foreach($id as $value);
-            // $idlm = $value->id;
-            // $idbr = $idlm + 1;
-
-            // $kd_pegawai = 'KJP-'.$idbr;
-
-            $data = new Pegawai();
-            $data->nik_ktp = $request->nik_ktp;
-            $data->nama = $request->nama;
-            $data->nik_karyawan = $request->nik_karyawan;
-            $data->tempat_lahir = $request->tempat_lahir;
-            $data->tgl_lahir = $request->tgl_lahir;
-            $data->tgl_masuk = $request->tgl_masuk;
-            // $data->telp = $request->telp;
-            $data->jabatan = $request->jabatan;
-            $data->kepengurusan = $request->kepengurusan;
-            $data->alamat = $request->alamat;
-            $simpan= $data->save();
-            if ($simpan) {
-                return redirect()->route('v_anggota')->with('success', 'Selamat, Data Berhasil Ditambahkan!!!');
-            }
-
-    }
-
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-   
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         Request()->validate([
@@ -132,7 +91,6 @@ class PegawaiController extends Controller
            'tgl_masuk' => 'required',
             'jabatan' => 'required',
             'kepengurusan' => 'required',
-            
             'alamat' => 'required',
         ],[
             'nik_ktp.required'=>'NIK KTP Wajib Diisi !!!',
@@ -146,30 +104,21 @@ class PegawaiController extends Controller
            'tgl_masuk.required'=>'Tanggal masuk Wajib Diisi !!!',
             'jabatan.required'=>' Status Karyawan Wajib Diisi !!!',
             'kepengurusan.required'=>'Kepengurusan Wajib Diisi !!!',
-            
             'alamat.required'=>'Alamat Wajib Diisi !!!',
         ]);
-        // $id = Pegawai::get('id');
-        //     foreach($id as $value);
-        //     $idlm = $value->id;
-        //     $idbr = $idlm + 1;
-
-        //     $kd_pegawai = 'KJP-'.$idbr;
-
-            $data = new Pegawai();
-            $data->nik_ktp = $request->nik_ktp;
-            $data->nama = $request->nama;
-            $data->nik_karyawan = $request->nik_karyawan;
-            $data->tempat_lahir = $request->tempat_lahir;
-            $data->tgl_lahir = $request->tgl_lahir;
-           $data->tgl_masuk = $request->tgl_masuk;
-            $data->jabatan = $request->jabatan;
-            $data->kepengurusan = $request->kepengurusan;
-            $data->alamat = $request->alamat;
-            $simpan= $data->save();
-            if ($simpan) {
-                return redirect()->route('v_anggota')->with('message', 'Selamat, Data Berhasil Ditambahkan!!!');
-            }
+            $request = [
+                'nik_ktp' => Request()->nik_ktp,
+                'nama' => Request()->nama,
+                'nik_karyawan' => Request()->nik_karyawan,
+                'tempat_lahir' => Request()->tempat_lahir,
+                'tgl_lahir' => Request()->tgl_lahir,
+                'tgl_masuk' => Request()->tgl_masuk,
+                'jabatan' => Request()->jabatan,
+                'kepengurusan' => Request()->kepengurusan,
+                'alamat' => Request()->alamat,
+            ];
+            $this->Pegawai->simpanPegawai($request);
+            return redirect()->route('v_anggota')->with('message', 'Sukses');
 
     }
 
